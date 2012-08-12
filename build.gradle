@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.6'
+
+repositories {
+	flatDir { dirs "lib" }
+	mavenLocal()
+    maven {
+        url 'http://localhost:8000/nexus/content/groups/public/'
+        credentials {
+            username 'deployment'
+            password '123456'
+        }
+    }
+}
+
+dependencies {
+	groovy 'org.codehaus.groovy:groovy-all:1.8.6'
+
+    compile 'io.netty:netty:3.5.2.Final'
+    compile 'commons-logging:commons-logging:1.1.1'
+    compile 'commons-io:commons-io:2.3'
+    compile 'commons-lang:commons-lang:2.6'
+    //compile 'org.springframework:spring-core:2.5.6'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.apache.httpcomponents:httpclient:4.2'
+    compile 'org.apache.httpcomponents:httpclient-cache:4.2'
+    compile 'org.apache.httpcomponents:httpmime:4.2'
+    compile 'org.apache.httpcomponents:httpcore:4.2.1'
+
+    testCompile 'junit:junit:4.10'
+    testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
+}
