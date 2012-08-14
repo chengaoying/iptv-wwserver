@@ -45,15 +45,19 @@ public class ServerRoomInfo {
     }
 
     public ClientRoomInfo createClientRoomInfo() {
+        return createClientRoomInfo(0, tables.size());
+    }
+
+    public ClientRoomInfo createClientRoomInfo(int tableIdOff, int count) {
         ClientRoomInfo croomInfo = new ClientRoomInfo();
         croomInfo.setRoomId(roomId);
         croomInfo.setRoomName(roomName);
         croomInfo.setPlayerCount(playerCount);
-
-        List<ClientTableDesc> tableDescList = new ArrayList<>(tables.size());
-
-
-        //TODO
+        List<ClientTableDesc> tableDescList = new ArrayList<>(count);
+        for (int i = tableIdOff; i < tableIdOff+count; ++i) {
+            tableDescList.add(tables.get(i).createClientTableDesc());
+        }
+        croomInfo.setTables(tableDescList);
         return croomInfo;
     }
 

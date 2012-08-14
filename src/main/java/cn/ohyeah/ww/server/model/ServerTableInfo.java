@@ -20,6 +20,14 @@ public class ServerTableInfo {
         players = new CopyOnWriteArrayList<>();
     }
 
+    public boolean addRole(ServerRoleInfo roleInfo) {
+        return players.add(roleInfo);
+    }
+
+    public boolean removeRole(ServerRoleInfo roleInfo) {
+        return players.remove(roleInfo);
+    }
+
     public ClientTableDesc createClientTableDesc() {
         ClientTableDesc tableDesc = new ClientTableDesc();
         tableDesc.setTableId(tableId);
@@ -34,7 +42,13 @@ public class ServerTableInfo {
 
     public ClientTableInfo createClientTableInfo() {
         ClientTableInfo ctableInfo = new ClientTableInfo();
-        //TODO
+        ctableInfo.setTableId(tableId);
+        ctableInfo.setTableName(tableName);
+        List<ClientRoleDesc> roleDescList = new ArrayList<>(players.size());
+        for (ServerRoleInfo roleInfo : players) {
+            roleDescList.add(roleInfo.createClientRoleDesc());
+        }
+        ctableInfo.setPlayers(roleDescList);
         return ctableInfo;
     }
 

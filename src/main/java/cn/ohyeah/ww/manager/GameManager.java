@@ -3,10 +3,12 @@ package cn.ohyeah.ww.manager;
 import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.client.model.ClientRoomDesc;
 import cn.ohyeah.ww.client.model.ClientRoomInfo;
+import cn.ohyeah.ww.client.model.ClientTableInfo;
 import cn.ohyeah.ww.protocol.impl.ProtocolProcessException;
 import cn.ohyeah.ww.server.model.ServerHallInfo;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import cn.ohyeah.ww.server.model.ServerRoomInfo;
+import cn.ohyeah.ww.server.model.ServerTableInfo;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
@@ -21,22 +23,11 @@ public class GameManager {
     private ServerHallInfo hallInfo;
     private Map<Integer, ServerRoleInfo> roles;
     private Map<Channel, ServerRoleInfo> channelRoles;
-    //private ChannelGroup channels;
 
     public GameManager() {
-        //channels = new DefaultChannelGroup("wwserver-channel-group");
         roles = new ConcurrentHashMap<>();
         channelRoles = new ConcurrentHashMap<>();
     }
-
-    /*
-    public boolean addChannel(Channel channel) {
-        return channels.add(channel);
-    }
-
-    public boolean removeChannel(Channel channel) {
-        return channels.remove(channel);
-    }*/
 
     public ServerRoleInfo addChannelRole(Channel channel, ServerRoleInfo role) {
         return channelRoles.put(channel, role);
@@ -113,6 +104,7 @@ public class GameManager {
         ServerRoleInfo roleInfo = checkReadRole(roleId);
         checkUserToken(roleInfo.getTolen(), token);
         ServerRoomInfo roomInfo = hallInfo.getRooms().get(roomId);
+        roomInfo.addRole(roleInfo);
         roleInfo.setRoom(roomInfo);
     }
 
@@ -121,13 +113,43 @@ public class GameManager {
         checkUserToken(roleInfo.getTolen(), token);
         ServerRoomInfo roomInfo = roleInfo.getRoom();
         if (roomInfo != null) {
-
+            roomInfo.removeRole(roleInfo);
+            roleInfo.setRoom(null);
         }
     }
 
     public ClientRoomInfo queryRoomInfo(int roleId, int[] token) {
-        //TODO
-        return null;
+        ServerRoleInfo roleInfo = checkReadRole(roleId);
+        checkUserToken(roleInfo.getTolen(), token);
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        return roomInfo.createClientRoomInfo();
     }
+
+    public void loginTable(int roleId, int[] token, int tableId) {
+        ServerRoleInfo roleInfo = checkReadRole(roleId);
+        checkUserToken(roleInfo.getTolen(), token);
+        ServerTableInfo tableInfo = roleInfo.getRoom().getTables().get(tableId);
+        tableInfo.addRole(roleInfo);
+        roleInfo.setTable(tableInfo);
+    }
+
+    public void quitTable(int roleId, int[] token) {
+        ServerRoleInfo roleInfo = checkReadRole(roleId);
+        checkUserToken(roleInfo.getTolen(), token);
+        ServerTableInfo tableInfo = roleInfo.getTable();
+        if (tableInfo != null) {
+            tableInfo.removeRole(roleInfo);
+            roleInfo.setTable(null);
+        }
+    }
+
+    public ClientTableInfo queryTableInfo(int roleId, int[] token) {
+        ServerRoleInfo roleInfo = checkReadRole(roleId);
+        checkUserToken(roleInfo.getTolen(), token);
+        ServerTableInfo tableInfo = roleInfo.getTable();
+        return tableInfo.createClientTableInfo();
+    }
+
+
 
 }
