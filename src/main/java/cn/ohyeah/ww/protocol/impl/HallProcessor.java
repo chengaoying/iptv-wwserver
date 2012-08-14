@@ -1,6 +1,10 @@
 package cn.ohyeah.ww.protocol.impl;
 
+import cn.ohyeah.stb.util.ByteBuffer;
+import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.HallService;
+
+import java.util.Map;
 
 public class HallProcessor extends AbstractProcessor {
 
@@ -10,19 +14,28 @@ public class HallProcessor extends AbstractProcessor {
         this.service = service;
     }
 
-    public void login() {
-        params.put("roleId", buffer.readInt());
-        params.put("roleName", buffer.readString());
-        params.put("hallId", buffer.readInt());
-        refreshBuffer();
-        writeToken(service.login(params));
+    public ByteBuffer login(ProcessContext context, ByteBuffer req) {
+        Map<String, Object> params = context.getParams();
+        params.put("roleId", req.readInt());
+        params.put("roleName", req.readString());
+        params.put("hallId", req.readInt());
+        int[] token = service.login(params);
+        ByteBuffer rsp = context.createResponse(32);
+        writeToken(rsp, token);
+        return rsp;
     }
 
-    public void quit() {
-        params.put("token", readToken());
-        params.put("roleId", buffer.readInt());
-        refreshBuffer();
+    public ByteBuffer quit(ProcessContext context, ByteBuffer req) {
+        Map<String, Object> params = context.getParams();
+        params.put("token", readToken(req));
+        params.put("roleId", req.readInt());
         service.quit(params);
+        ByteBuffer rsp = context.createResponse(16);
+        return rsp;
+    }
+
+    public ByteBuffer queryInfo(ProcessContext context, ByteBuffer req) {
+        return null;
     }
 
 }

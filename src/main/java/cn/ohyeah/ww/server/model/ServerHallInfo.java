@@ -1,5 +1,9 @@
 package cn.ohyeah.ww.server.model;
 
+import cn.ohyeah.ww.client.model.ClientHallInfo;
+import cn.ohyeah.ww.client.model.ClientRoomDesc;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerHallInfo {
@@ -11,6 +15,19 @@ public class ServerHallInfo {
     public ServerHallInfo(int id, String name) {
         this.hallId = id;
         this.hallName = name;
+    }
+
+    public ClientHallInfo createClientHallInfo() {
+        ClientHallInfo challInfo = new ClientHallInfo();
+        challInfo.setHallId(hallId);
+        challInfo.setHallName(hallName);
+        challInfo.setPlayerCount(playerCount);
+        List<ClientRoomDesc> roomDescList = new ArrayList<>(rooms.size());
+        for (ServerRoomInfo roomInfo : rooms) {
+            roomDescList.add(roomInfo.createClientRoomDesc());
+        }
+        challInfo.setRooms(roomDescList);
+        return challInfo;
     }
 
     public String getHallName() {
