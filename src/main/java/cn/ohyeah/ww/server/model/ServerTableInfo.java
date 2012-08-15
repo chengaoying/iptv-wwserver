@@ -10,14 +10,18 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerTableInfo {
-    private int tableId;
+    private final int tableId;
+    private final int limitPlayers;
     private String tableName;
     private int state;
     private List<ServerRoleInfo> players;
     private ServerRoomInfo room;
 
-    public ServerTableInfo() {
-        players = new CopyOnWriteArrayList<>();
+    public ServerTableInfo(int id, int limitPlayers) {
+        this.tableId = id;
+        this.limitPlayers = limitPlayers;
+        this.tableName = "";
+        this.players = new CopyOnWriteArrayList<>();
     }
 
     public boolean addRole(ServerRoleInfo roleInfo) {
@@ -52,10 +56,6 @@ public class ServerTableInfo {
         return ctableInfo;
     }
 
-    public ServerTableInfo(int id) {
-        this.tableId = id;
-    }
-
     public ServerRoomInfo getRoom() {
         return room;
     }
@@ -66,10 +66,6 @@ public class ServerTableInfo {
 
     public int getTableId() {
         return tableId;
-    }
-
-    public void setTableId(int tableId) {
-        this.tableId = tableId;
     }
 
     public String getTableName() {

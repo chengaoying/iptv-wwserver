@@ -16,13 +16,13 @@ public class ServerRoomInfo {
     private Map<Integer, ServerRoleInfo> roles;
     private ServerHallInfo hall;
 
-    public ServerRoomInfo(int id, String name, int tableCount) {
+    public ServerRoomInfo(int id, String name, int tableCount, int tableLimitPlayer) {
         this.roomId = id;
         this.roomName = name;
         this.roles = new ConcurrentHashMap<>();
         this.tables = new ArrayList<ServerTableInfo>(tableCount);
         for (int i = 0; i < tableCount; ++i) {
-            ServerTableInfo table = new ServerTableInfo(i);
+            ServerTableInfo table = new ServerTableInfo(i, tableLimitPlayer);
             table.setRoom(this);
             tables.set(i, table);
         }

@@ -1,24 +1,27 @@
 package cn.ohyeah.ww.service;
 
-import cn.ohyeah.ww.client.model.ClientGameInfo;
 
 import java.util.Map;
 
 public class GameService {
     public void prepare(Map<String, Object> params) {
-
+        //TODO
     }
 
-    public void start(Map<String, Object> params) {
-
+    public void quit(Map<String, Object> params) {
+        //TODO
     }
 
-    public void play(Map<String, Object> params) {
-
+    public void useProp(Map<String, Object> params) {
+        //TODO
     }
 
-    public ClientGameInfo queryInfo(Map<String, Object> params) {
-        return null;
+    public void attack(Map<String, Object> params) {
+        //TODO
+    }
+
+    public void endRound(Map<String, Object> params) {
+        //TODO
     }
 
 }

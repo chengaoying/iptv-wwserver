@@ -1,5 +1,7 @@
 package cn.ohyeah.ww.client.model;
 
+import cn.ohyeah.stb.util.ByteBuffer;
+
 import java.util.List;
 
 public class ClientHallInfo {
@@ -38,5 +40,13 @@ public class ClientHallInfo {
 
     public void setRooms(List<ClientRoomDesc> rooms) {
         this.rooms = rooms;
+    }
+
+    public void serialize(ByteBuffer buf) {
+        //TODO
+    }
+
+    public void deserialize(ByteBuffer buf) {
+        //TODO
     }
 }

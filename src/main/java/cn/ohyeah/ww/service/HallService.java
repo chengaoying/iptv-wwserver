@@ -2,19 +2,18 @@ package cn.ohyeah.ww.service;
 
 import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.dao.IGameRoleDao;
-import cn.ohyeah.ww.manager.GameManager;
+import cn.ohyeah.ww.manager.HallManager;
 import cn.ohyeah.ww.model.GameRole;
-import cn.ohyeah.ww.server.model.ServerHallInfo;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.jboss.netty.channel.Channel;
 
 import java.util.Map;
 
 public class HallService {
-    private GameManager manager;
+    private HallManager manager;
     private IGameRoleDao roleDao;
 
-    public void setManager(GameManager manager) {
+    public void setManager(HallManager manager) {
         this.manager = manager;
     }
 
@@ -31,17 +30,17 @@ public class HallService {
         GameRole role = roleDao.readByName(roleName);
         ServerRoleInfo roleInfo = new ServerRoleInfo();
         roleInfo.setChannel(channel);
-        manager.loginHall(roleInfo);
+        manager.loginHall(roleInfo, hallId);
         return roleInfo.getTolen();
     }
 
     public void quit(Map<String, Object> params) {
         int roleId = (Integer)params.get("roleId");
-        manager.quitHall(roleId);
+        int[] token = (int[])params.get("token");
+        manager.quitHall(roleId, token);
     }
 
     public ClientHallInfo queryInfo(Map<String, Object> params) {
-
         return null;
     }
 }

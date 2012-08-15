@@ -9,6 +9,10 @@ public class TableService {
 
     }
 
+    public void quickJoin(Map<String, Object> params) {
+
+    }
+
     public void quit(Map<String, Object> params) {
 
     }

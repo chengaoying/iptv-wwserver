@@ -27,16 +27,17 @@ public class Constant {
     public static enum CmdTableUserdata {
         LOGIN,
         QUIT,
+        QUICK_JOIN,
         QUERY_INFO
     };
 
     public static enum CmdGameUserdata {
         PREPARE,
-        START,
-        END,
-        PAUSE,
-        PLAY,
-        QUERY_INFO
+        QUIT,
+        USE_PROP,
+        ATTACK,
+        END_ROUND,
+        //QUERY_INFO
     };
 
     public static final String[][] PROTOCOL_CMDS_USERDATAS = {

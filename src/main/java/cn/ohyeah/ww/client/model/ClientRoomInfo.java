@@ -1,5 +1,7 @@
 package cn.ohyeah.ww.client.model;
 
+import cn.ohyeah.stb.util.ByteBuffer;
+
 import java.util.List;
 
 public class ClientRoomInfo {
@@ -38,5 +40,13 @@ public class ClientRoomInfo {
 
     public void setTables(List<ClientTableDesc> tables) {
         this.tables = tables;
+    }
+
+    public void serialize(ByteBuffer buf) {
+
+    }
+
+    public void deserialize(ByteBuffer buf) {
+
     }
 }
