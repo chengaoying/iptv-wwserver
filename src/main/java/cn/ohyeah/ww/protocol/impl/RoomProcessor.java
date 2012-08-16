@@ -33,6 +33,16 @@ public class RoomProcessor extends AbstractProcessor {
         return rsp;
     }
 
+
+    public ByteBuffer quickJoin(ProcessContext context, ByteBuffer req) {
+        Map<String, Object> params = context.getParams();
+        params.put("token", readToken(req));
+        params.put("roleId", req.readInt());
+        roomService.quickJoinTable(params);
+        ByteBuffer rsp = context.createResponse(16);
+        return rsp;
+    }
+
     public ByteBuffer queryInfo(ProcessContext context, ByteBuffer req) {
         Map<String, Object> params = context.getParams();
         params.put("token", readToken(req));

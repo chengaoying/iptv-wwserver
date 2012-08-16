@@ -3,6 +3,7 @@ package cn.ohyeah.ww.manager;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.group.ChannelGroup;
+import org.jboss.netty.channel.group.ChannelGroupFuture;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 import java.util.Map;
@@ -10,19 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ChannelManager {
     private Map<Channel, ServerRoleInfo> channelRoles;
-    private ChannelGroup channels;
 
     public ChannelManager() {
-        channels = new DefaultChannelGroup("wwserver-channel-group");
         channelRoles = new ConcurrentHashMap<>();
-    }
-
-    public boolean addChannel(Channel channel) {
-        return channels.add(channel);
-    }
-
-    public boolean removeChannel(Channel channel) {
-        return channels.remove(channel);
     }
 
     public ServerRoleInfo addChannelRole(Channel channel, ServerRoleInfo roleInfo) {
@@ -31,5 +22,17 @@ public class ChannelManager {
 
     public ServerRoleInfo removeChannelRole(Channel channel) {
         return channelRoles.remove(channel);
+    }
+
+    public ServerRoleInfo getRoleByChannel(Channel channel) {
+        return channelRoles.get(channel);
+    }
+
+    public ChannelGroupFuture closeAllChannel() {
+        ChannelGroup channels = new DefaultChannelGroup("wwserver-channel-group");
+        for (Channel ch : channelRoles.keySet()) {
+            channels.add(ch);
+        }
+        return channels.close();
     }
 }

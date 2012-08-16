@@ -5,10 +5,14 @@ import java.util.Date;
 public class GameRole {
     private int roleId;
     private String roleName;
+    private String nickName;
+    private String password;
     private int accountId;
     private String userId;
     private int gender;
     private String headIcon;
+    private int goldCoin;
+    private int gameCoin;
     private int scores;
     private int state;
     private int onlineSeconds;
@@ -20,6 +24,7 @@ public class GameRole {
     private Date loginTime;
     private Date logoutTime;
     private String loginIp;
+
 
     public int getRoleId() {
         return roleId;
@@ -35,6 +40,22 @@ public class GameRole {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getAccountId() {
@@ -67,6 +88,22 @@ public class GameRole {
 
     public void setHeadIcon(String headIcon) {
         this.headIcon = headIcon;
+    }
+
+    public int getGoldCoin() {
+        return goldCoin;
+    }
+
+    public void setGoldCoin(int goldCoin) {
+        this.goldCoin = goldCoin;
+    }
+
+    public int getGameCoin() {
+        return gameCoin;
+    }
+
+    public void setGameCoin(int gameCoin) {
+        this.gameCoin = gameCoin;
     }
 
     public int getScores() {

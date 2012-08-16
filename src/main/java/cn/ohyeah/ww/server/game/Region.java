@@ -1,7 +1,6 @@
-package cn.ohyeah.ww.client.game;
+package cn.ohyeah.ww.server.game;
 
 public class Region {
-	private static int borderColor;
 	private short id;
 	private String name;
 	private short soldiers;
@@ -10,41 +9,27 @@ public class Region {
 	private short rightRegionId;
 	private short upRegionId;
 	private short downRegionId;
-	private short centerTileRow;
-	private short centerTileCol;
-	private short centerTileX;
-	private short centerTileY;
 	private short[] adjacentRegions;
-	private int propId;  //防御卡片
-	private int propId2; //攻击卡片
-	private short growthSoldiers; //增长士兵数
-	private boolean isSelected;  //是否被选中
+	private int attackPropId;
+	private int defensePropId;
 
-	public boolean isSelected() {
-		return isSelected;
-	}
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
-	}
-	public short getGrowthSoldiers() {
-		return growthSoldiers;
-	}
-	public void setGrowthSoldiers(short growthSoldiers) {
-		this.growthSoldiers = growthSoldiers;
-	}
-	public int getPropId2() {
-		return propId2;
-	}
-	public void setPropId2(int propId2) {
-		this.propId2 = propId2;
-	}
-	public int getPropId() {
-		return propId;
-	}
-	public void setPropId(int propId) {
-		this.propId = propId;
-	}
-	public short getId() {
+    public int getAttackPropId() {
+        return attackPropId;
+    }
+
+    public void setAttackPropId(int attackPropId) {
+        this.attackPropId = attackPropId;
+    }
+
+    public int getDefensePropId() {
+        return defensePropId;
+    }
+
+    public void setDefensePropId(int defensePropId) {
+        this.defensePropId = defensePropId;
+    }
+
+    public short getId() {
 		return id;
 	}
 	public void setId(short id) {
@@ -86,41 +71,11 @@ public class Region {
 	public void setDownRegionId(short downRegionId) {
 		this.downRegionId = downRegionId;
 	}
-	public short getCenterTileRow() {
-		return centerTileRow;
-	}
-	public void setCenterTileRow(short centerTileRow) {
-		this.centerTileRow = centerTileRow;
-	}
-	public short getCenterTileCol() {
-		return centerTileCol;
-	}
-	public void setCenterTileCol(short centerTileCol) {
-		this.centerTileCol = centerTileCol;
-	}
 	public void setName(String name) {
 		this.name = name;
 	}
 	public String getName() {
 		return name;
-	}
-	public static void setBorderColor(int borderColor) {
-		Region.borderColor = borderColor;
-	}
-	public static int getBorderColor() {
-		return borderColor;
-	}
-	public void setCenterTileX(short centerTileX) {
-		this.centerTileX = centerTileX;
-	}
-	public short getCenterTileX() {
-		return centerTileX;
-	}
-	public void setCenterTileY(short centerTileY) {
-		this.centerTileY = centerTileY;
-	}
-	public short getCenterTileY() {
-		return centerTileY;
 	}
 	public void setAdjacentRegions(short[] adjacentRegions) {
 		this.adjacentRegions = adjacentRegions;

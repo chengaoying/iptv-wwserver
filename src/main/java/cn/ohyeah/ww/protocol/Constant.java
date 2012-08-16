@@ -5,6 +5,30 @@ public class Constant {
     public static final byte PROTOCOL_VERSION = 2;
     public static final byte PROTOCOL_TAG_GAME_SERVER = 0X0F;
 
+    public static final short EC_ROLE_OFFLINE = -1;
+    public static final short EC_ROLE_IDLE_TIMEOUT = -2;
+    public static final short EC_HALL_FULL = -3;
+    public static final short EC_ROOM_FULL = -4;
+    public static final short EC_TABLE_FULL = -5;
+    public static final short EC_ROUND_TIMEOUT = -6;
+    public static final short EC_GAME_STATE_INCONSISTENT = -7;
+
+
+    public static final String getErrorMessage(int errorCode) {
+        String msg = "未知错误";
+        switch (errorCode) {
+            case EC_ROLE_OFFLINE: msg = "账号已掉线"; break;
+            case EC_ROLE_IDLE_TIMEOUT: msg = "长时间没有活动"; break;
+            case EC_HALL_FULL: msg = "大厅人数已满"; break;
+            case EC_ROOM_FULL: msg = "房间人数已满"; break;
+            case EC_TABLE_FULL: msg = "房间人数已满"; break;
+            case EC_ROUND_TIMEOUT: msg = "回合超时"; break;
+            case EC_GAME_STATE_INCONSISTENT: msg = "客户端与服务器游戏状态不一致"; break;
+            default: break;
+        }
+        return msg;
+    }
+
     public static enum ProtocolCmd {
         HALL,
         ROOM,
@@ -21,13 +45,13 @@ public class Constant {
     public static enum CmdRoomUserdata {
         LOGIN,
         QUIT,
+        QUICK_JOIN_TABLE,
         QUERY_INFO
     };
 
     public static enum CmdTableUserdata {
-        LOGIN,
+        JOIN,
         QUIT,
-        QUICK_JOIN,
         QUERY_INFO
     };
 
@@ -104,5 +128,4 @@ public class Constant {
         checkProtocolCmd(cmd);
         return PROTOCOL_CMDS_USERDATAS[cmd+1];
     }
-
 }

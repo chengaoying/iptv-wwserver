@@ -1,8 +1,7 @@
 package cn.ohyeah.ww.protocol.impl;
 
 public class ProtocolProcessException extends RuntimeException {
-    public ProtocolProcessException() {
-    }
+    public ProtocolProcessException() {}
 
     public ProtocolProcessException(String message) {
         super(message);

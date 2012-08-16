@@ -1,4 +1,4 @@
-package cn.ohyeah.ww.game;
+package cn.ohyeah.ww.server.game;
 
 /**
  * µÀ¾ß

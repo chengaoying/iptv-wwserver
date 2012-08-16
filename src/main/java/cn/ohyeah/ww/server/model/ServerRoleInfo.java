@@ -13,6 +13,7 @@ public class ServerRoleInfo {
     private GameRole role;
     private int[] tolen;
 
+
     public ServerRoleInfo() {}
 
     public ClientRoleDesc createClientRoleDesc() {

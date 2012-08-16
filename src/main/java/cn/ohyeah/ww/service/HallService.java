@@ -2,6 +2,7 @@ package cn.ohyeah.ww.service;
 
 import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.dao.IGameRoleDao;
+import cn.ohyeah.ww.manager.ChannelManager;
 import cn.ohyeah.ww.manager.HallManager;
 import cn.ohyeah.ww.model.GameRole;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
@@ -10,11 +11,16 @@ import org.jboss.netty.channel.Channel;
 import java.util.Map;
 
 public class HallService {
-    private HallManager manager;
+    private ChannelManager channelManager;
+    private HallManager hallManager;
     private IGameRoleDao roleDao;
 
-    public void setManager(HallManager manager) {
-        this.manager = manager;
+    public void setHallManager(HallManager hallManager) {
+        this.hallManager = hallManager;
+    }
+
+    public void setChannelManager(ChannelManager channelManager) {
+        this.channelManager = channelManager;
     }
 
     public void setGameRoleDao(IGameRoleDao roleDao) {
@@ -30,17 +36,21 @@ public class HallService {
         GameRole role = roleDao.readByName(roleName);
         ServerRoleInfo roleInfo = new ServerRoleInfo();
         roleInfo.setChannel(channel);
-        manager.loginHall(roleInfo, hallId);
+        hallManager.loginHall(roleInfo, hallId);
+        channelManager.addChannelRole(channel, roleInfo);
         return roleInfo.getTolen();
     }
 
     public void quit(Map<String, Object> params) {
         int roleId = (Integer)params.get("roleId");
         int[] token = (int[])params.get("token");
-        manager.quitHall(roleId, token);
+        ServerRoleInfo roleInfo = hallManager.quitHall(roleId, token);
+        channelManager.removeChannelRole(roleInfo.getChannel());
     }
 
     public ClientHallInfo queryInfo(Map<String, Object> params) {
-        return null;
+        int roleId = (Integer)params.get("roleId");
+        int[] token = (int[])params.get("token");
+        return hallManager.queryHallInfo(roleId, token);
     }
 }

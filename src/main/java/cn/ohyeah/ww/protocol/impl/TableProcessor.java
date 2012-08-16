@@ -14,12 +14,12 @@ public class TableProcessor extends AbstractProcessor {
         this.tableService = tableService;
     }
 
-    public ByteBuffer login(ProcessContext context, ByteBuffer req) {
+    public ByteBuffer join(ProcessContext context, ByteBuffer req) {
         Map<String, Object> params = context.getParams();
         params.put("token", readToken(req));
         params.put("roleId", req.readInt());
         params.put("tableId", req.readInt());
-        tableService.login(params);
+        tableService.join(params);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
@@ -29,15 +29,6 @@ public class TableProcessor extends AbstractProcessor {
         params.put("token", readToken(req));
         params.put("roleId", req.readInt());
         tableService.quit(params);
-        ByteBuffer rsp = context.createResponse(16);
-        return rsp;
-    }
-
-    public ByteBuffer quickJoin(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        tableService.quickJoin(params);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }

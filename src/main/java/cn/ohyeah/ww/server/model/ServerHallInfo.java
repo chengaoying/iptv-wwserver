@@ -5,23 +5,41 @@ import cn.ohyeah.ww.client.model.ClientRoomDesc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ServerHallInfo {
-    private int hallId;
+    private final int hallId;
+    private final int limitPlayer;
     private String hallName;
-    private int playerCount;
+    private AtomicInteger playerCount;
     private List<ServerRoomInfo> rooms;
 
-    public ServerHallInfo(int id, String name) {
+    public ServerHallInfo(int id, String name, int hallLimitPlayer) {
         this.hallId = id;
         this.hallName = name;
+        this.limitPlayer = hallLimitPlayer;
+    }
+
+    synchronized public boolean roleLogin(ServerRoleInfo roleInfo) {
+        if (playerCount.get() < limitPlayer) {
+            roleInfo.setHall(this);
+            playerCount.incrementAndGet();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean roleQuit(ServerRoleInfo roleInfo) {
+        roleInfo.setHall(null);
+        playerCount.decrementAndGet();
+        return true;
     }
 
     public ClientHallInfo createClientHallInfo() {
         ClientHallInfo challInfo = new ClientHallInfo();
         challInfo.setHallId(hallId);
         challInfo.setHallName(hallName);
-        challInfo.setPlayerCount(playerCount);
+        challInfo.setPlayerCount(playerCount.get());
         List<ClientRoomDesc> roomDescList = new ArrayList<>(rooms.size());
         for (ServerRoomInfo roomInfo : rooms) {
             roomDescList.add(roomInfo.createClientRoomDesc());
@@ -42,16 +60,8 @@ public class ServerHallInfo {
         return hallId;
     }
 
-    public void setHallId(int hallId) {
-        this.hallId = hallId;
-    }
-
     public int getPlayerCount() {
-        return playerCount;
-    }
-
-    public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
+        return playerCount.get();
     }
 
     public List<ServerRoomInfo> getRooms() {

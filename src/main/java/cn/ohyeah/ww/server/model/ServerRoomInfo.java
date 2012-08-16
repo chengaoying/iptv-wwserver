@@ -4,22 +4,25 @@ import cn.ohyeah.ww.client.model.ClientRoomDesc;
 import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.client.model.ClientTableDesc;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ServerRoomInfo {
-    private int roomId;
+    private final int roomId;
+    private final int limitPlayer;
     private String roomName;
-    private int playerCount;
+    private AtomicInteger playerCount;
     private List<ServerTableInfo> tables;
     private Map<Integer, ServerRoleInfo> roles;
     private ServerHallInfo hall;
 
-    public ServerRoomInfo(int id, String name, int tableCount, int tableLimitPlayer) {
+    public ServerRoomInfo(final int id, final String name, final int roomLimitPlayer,
+                          final int tableCount, final int tableLimitPlayer) {
         this.roomId = id;
         this.roomName = name;
-        this.roles = new ConcurrentHashMap<>();
+        this.limitPlayer = roomLimitPlayer;
+        this.roles = new ConcurrentHashMap<>(roomLimitPlayer/2);
         this.tables = new ArrayList<ServerTableInfo>(tableCount);
         for (int i = 0; i < tableCount; ++i) {
             ServerTableInfo table = new ServerTableInfo(i, tableLimitPlayer);
@@ -28,19 +31,39 @@ public class ServerRoomInfo {
         }
     }
 
-    public ServerRoleInfo addRole(ServerRoleInfo roleInfo) {
-        return roles.put(roleInfo.getRole().getRoleId(), roleInfo);
+    public boolean roleQuickJoin(ServerRoleInfo roleInfo) {
+        boolean joined = false;
+        for (ServerTableInfo tableInfo : tables) {
+            joined = tableInfo.roleQuickJoin(roleInfo);
+            if (joined) {
+                break;
+            }
+        }
+        return joined;
     }
 
-    public ServerRoleInfo removeRole(ServerRoleInfo roleInfo) {
-        return roles.remove(roleInfo.getRole().getRoleId());
+    synchronized public boolean roleLogin(ServerRoleInfo roleInfo) {
+        if (playerCount.get() < limitPlayer) {
+            roles.put(roleInfo.getRole().getRoleId(), roleInfo);
+            roleInfo.setRoom(this);
+            playerCount.incrementAndGet();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean roleQuit(ServerRoleInfo roleInfo) {
+        roles.remove(roleInfo.getRole().getRoleId());
+        roleInfo.setRoom(null);
+        playerCount.decrementAndGet();
+        return true;
     }
 
     public ClientRoomDesc createClientRoomDesc() {
         ClientRoomDesc roomDesc = new ClientRoomDesc();
         roomDesc.setRoomId(roomId);
         roomDesc.setRoomName(roomName);
-        roomDesc.setPlayerCount(playerCount);
+        roomDesc.setPlayerCount(playerCount.get());
         return roomDesc;
     }
 
@@ -52,7 +75,7 @@ public class ServerRoomInfo {
         ClientRoomInfo croomInfo = new ClientRoomInfo();
         croomInfo.setRoomId(roomId);
         croomInfo.setRoomName(roomName);
-        croomInfo.setPlayerCount(playerCount);
+        croomInfo.setPlayerCount(playerCount.get());
         List<ClientTableDesc> tableDescList = new ArrayList<>(count);
         for (int i = tableIdOff; i < tableIdOff+count; ++i) {
             tableDescList.add(tables.get(i).createClientTableDesc());
@@ -73,10 +96,6 @@ public class ServerRoomInfo {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
-
     public String getRoomName() {
         return roomName;
     }
@@ -86,11 +105,7 @@ public class ServerRoomInfo {
     }
 
     public int getPlayerCount() {
-        return playerCount;
-    }
-
-    public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
+        return playerCount.get();
     }
 
     public List<ServerTableInfo> getTables() {

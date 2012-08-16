@@ -3,7 +3,6 @@ package cn.ohyeah.ww.server.model;
 import cn.ohyeah.ww.client.model.ClientRoleDesc;
 import cn.ohyeah.ww.client.model.ClientTableDesc;
 import cn.ohyeah.ww.client.model.ClientTableInfo;
-import cn.ohyeah.ww.model.GameRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class ServerTableInfo {
     private final int tableId;
     private final int limitPlayers;
     private String tableName;
-    private int state;
+    volatile private int state;
     private List<ServerRoleInfo> players;
     private ServerRoomInfo room;
 
@@ -24,12 +23,34 @@ public class ServerTableInfo {
         this.players = new CopyOnWriteArrayList<>();
     }
 
-    public boolean addRole(ServerRoleInfo roleInfo) {
-        return players.add(roleInfo);
+    public boolean isThirstForRole() {
+        return limitPlayers-players.size()<=2;
     }
 
-    public boolean removeRole(ServerRoleInfo roleInfo) {
-        return players.remove(roleInfo);
+    synchronized public boolean roleQuickJoin(ServerRoleInfo roleInfo) {
+        if (isThirstForRole()) {
+            return roleJoin(roleInfo);
+        }
+        return false;
+    }
+
+    synchronized public boolean roleJoin(ServerRoleInfo roleInfo) {
+        boolean result = false;
+        if (players.size() < limitPlayers) {
+            result = players.add(roleInfo);
+            if (result) {
+                roleInfo.setTable(this);
+            }
+        }
+        return result;
+    }
+
+    public boolean roleQuit(ServerRoleInfo roleInfo) {
+        boolean result = players.remove(roleInfo);
+        if (result) {
+            roleInfo.setTable(null);
+        }
+        return result;
     }
 
     public ClientTableDesc createClientTableDesc() {
@@ -82,13 +103,5 @@ public class ServerTableInfo {
 
     public void setState(int state) {
         this.state = state;
-    }
-
-    public List<ServerRoleInfo> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<ServerRoleInfo> players) {
-        this.players = players;
     }
 }

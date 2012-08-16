@@ -20,12 +20,15 @@ repositories {
 
 dependencies {
 	groovy 'org.codehaus.groovy:groovy-all:1.8.6'
-
     compile 'io.netty:netty:3.5.2.Final'
-    compile 'commons-logging:commons-logging:1.1.1'
+    compile 'net.sf.ehcache:ehcache-core:2.5.3'
     compile 'commons-io:commons-io:2.3'
     compile 'commons-lang:commons-lang:2.6'
-    //compile 'org.springframework:spring-core:2.5.6'
+    compile 'commons-logging:commons-logging:1.1.1'
+    compile 'javax.inject:javax.inject:1'
+    compile 'org.springframework:spring-core:3.1.2.RELEASE'
+    compile 'org.springframework:spring-tx:3.1.2.RELEASE'
+    compile 'org.springframework:spring-context:3.1.2.RELEASE'
     compile 'log4j:log4j:1.2.17'
     compile 'org.apache.httpcomponents:httpclient:4.2'
     compile 'org.apache.httpcomponents:httpclient-cache:4.2'
