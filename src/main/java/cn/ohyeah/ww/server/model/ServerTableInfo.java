@@ -15,6 +15,7 @@ public class ServerTableInfo {
     volatile private int state;
     private List<ServerRoleInfo> players;
     private ServerRoomInfo room;
+    volatile private TableGameState gameState;
 
     public ServerTableInfo(int id, int limitPlayers) {
         this.tableId = id;
@@ -43,6 +44,16 @@ public class ServerTableInfo {
             }
         }
         return result;
+    }
+
+    public boolean getReady() {
+        for (ServerRoleInfo roleInfo : players) {
+            if (!roleInfo.isReady()) {
+               return false;
+            }
+        }
+        this.gameState = new TableGameState();
+        return true;
     }
 
     public boolean roleQuit(ServerRoleInfo roleInfo) {

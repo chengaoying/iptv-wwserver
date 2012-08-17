@@ -14,30 +14,36 @@ public class TableProcessor extends AbstractProcessor {
         this.tableService = tableService;
     }
 
+    public ByteBuffer prepare(ProcessContext context, ByteBuffer req) {
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        int[] propIds = readPropIds(req);
+        tableService.prepare(roleId, token, propIds);
+        ByteBuffer rsp = context.createResponse(16);
+        return rsp;
+    }
+
     public ByteBuffer join(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        params.put("tableId", req.readInt());
-        tableService.join(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        int tableId = req.readInt();
+        tableService.join(roleId, token, tableId);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer quit(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        tableService.quit(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        tableService.quit(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer queryInfo(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        ClientTableInfo ctableInfo = tableService.queryInfo(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        ClientTableInfo ctableInfo = tableService.queryInfo(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         ctableInfo.serialize(rsp);
         return rsp;

@@ -13,52 +13,46 @@ public class GameProcessor extends AbstractProcessor {
         this.gameService = gameService;
     }
 
-    public ByteBuffer prepare(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        params.put("propIds", readPropIds(req));
-        gameService.prepare(params);
+    public ByteBuffer quit(ProcessContext context, ByteBuffer req) {
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        gameService.quit(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
-    public ByteBuffer quit(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        gameService.attack(params);
+    public ByteBuffer coerceQuit(ProcessContext context, ByteBuffer req) {
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        gameService.coerceQuit(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer useProp(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        params.put("propId", req.readInt());
-        params.put("destRegionId", req.readShort());
-        gameService.attack(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        int propId = req.readInt();
+        int destRegionId = req.readShort();
+        gameService.attack(roleId, token, propId, destRegionId);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer attack(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        params.put("srcRegionId", req.readShort());
-        params.put("destRegionId", req.readShort());
-        gameService.attack(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        int srcRegionId = req.readShort();
+        int destRegionId = req.readShort();
+        gameService.attack(roleId, token, srcRegionId, destRegionId);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer endRound(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        gameService.endRound(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        gameService.endRound(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }

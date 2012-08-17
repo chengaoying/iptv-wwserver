@@ -15,39 +15,35 @@ public class RoomProcessor extends AbstractProcessor {
     }
 
     public ByteBuffer login(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        params.put("roomId", req.readInt());
-        roomService.login(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        int roomId = req.readInt();
+        roomService.login(roleId, token, roomId);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer quit(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        roomService.quit(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        roomService.quit(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
 
     public ByteBuffer quickJoin(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        roomService.quickJoinTable(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        roomService.quickJoinTable(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer queryInfo(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        ClientRoomInfo croomInfo = roomService.queryInfo(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        ClientRoomInfo croomInfo = roomService.queryInfo(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         croomInfo.serialize(rsp);
         return rsp;

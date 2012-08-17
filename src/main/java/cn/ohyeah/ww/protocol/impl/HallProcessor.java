@@ -16,30 +16,27 @@ public class HallProcessor extends AbstractProcessor {
     }
 
     public ByteBuffer login(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("roleId", req.readInt());
-        params.put("roleName", req.readString());
-        params.put("hallId", req.readInt());
-        int[] token = hallService.login(params);
+        String roleName = req.readUTF();
+        String password = req.readUTF();
+        int hallId = req.readInt();
+        int[] token = hallService.login(roleName, password, hallId, context.getChannel());
         ByteBuffer rsp = context.createResponse(32);
         writeToken(rsp, token);
         return rsp;
     }
 
     public ByteBuffer quit(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        hallService.quit(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        hallService.quit(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         return rsp;
     }
 
     public ByteBuffer queryInfo(ProcessContext context, ByteBuffer req) {
-        Map<String, Object> params = context.getParams();
-        params.put("token", readToken(req));
-        params.put("roleId", req.readInt());
-        ClientHallInfo challInfo = hallService.queryInfo(params);
+        int roleId = req.readInt();
+        int[] token = readToken(req);
+        ClientHallInfo challInfo = hallService.queryInfo(roleId, token);
         ByteBuffer rsp = context.createResponse(16);
         challInfo.serialize(rsp);
         return rsp;

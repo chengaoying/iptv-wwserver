@@ -12,6 +12,7 @@ public class Constant {
     public static final short EC_TABLE_FULL = -5;
     public static final short EC_ROUND_TIMEOUT = -6;
     public static final short EC_GAME_STATE_INCONSISTENT = -7;
+    public static final short EC_LOAD_MAP_FAILED = -8;
 
 
     public static final String getErrorMessage(int errorCode) {
@@ -24,6 +25,7 @@ public class Constant {
             case EC_TABLE_FULL: msg = "房间人数已满"; break;
             case EC_ROUND_TIMEOUT: msg = "回合超时"; break;
             case EC_GAME_STATE_INCONSISTENT: msg = "客户端与服务器游戏状态不一致"; break;
+            case EC_LOAD_MAP_FAILED: msg = "加载地图失败"; break;
             default: break;
         }
         return msg;
@@ -52,12 +54,13 @@ public class Constant {
     public static enum CmdTableUserdata {
         JOIN,
         QUIT,
-        QUERY_INFO
+        QUERY_INFO,
+        PREPARE
     };
 
     public static enum CmdGameUserdata {
-        PREPARE,
         QUIT,
+        COERCE_QUIT,
         USE_PROP,
         ATTACK,
         END_ROUND,

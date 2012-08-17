@@ -1,6 +1,7 @@
 package cn.ohyeah.ww.protocol;
 
 import cn.ohyeah.stb.util.ByteBuffer;
+import org.jboss.netty.channel.Channel;
 
 import java.util.Map;
 
@@ -11,6 +12,7 @@ public class ProcessContext {
     private Object result;
     private ByteBuffer request;
     private ByteBuffer response;
+    private Channel channel;
     private Map<String, Object> params;
 
     public Map<String, Object> getParams() {
@@ -70,5 +72,13 @@ public class ProcessContext {
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 }

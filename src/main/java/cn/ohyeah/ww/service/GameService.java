@@ -4,23 +4,25 @@ package cn.ohyeah.ww.service;
 import java.util.Map;
 
 public class GameService {
-    public void prepare(Map<String, Object> params) {
+
+
+    public void quit(int roleId, int[] token) {
         //TODO
     }
 
-    public void quit(Map<String, Object> params) {
+    public void coerceQuit(int roleId, int[] token) {
         //TODO
     }
 
-    public void useProp(Map<String, Object> params) {
+    public void useProp(int roleId, int[] token, int propId, int destRegionId) {
         //TODO
     }
 
-    public void attack(Map<String, Object> params) {
+    public void attack(int roleId, int[] token, int srcRegionId, int destRegionId) {
         //TODO
     }
 
-    public void endRound(Map<String, Object> params) {
+    public void endRound(int roleId, int[] token) {
         //TODO
     }
 }

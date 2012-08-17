@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,7 +32,7 @@ public class MapManager {
                         int players = Integer.parseInt(file.getName());
                         loadMaps(file, players);
                     } catch (IOException e) {
-                        throw new RuntimeException("加载地图失败", e);
+                        throw new MapLoadException("加载地图失败", e);
                     }
                 }
             }
@@ -106,12 +105,12 @@ public class MapManager {
             String magic = new String(buf.readBytes(4));
             if (!MAP_MAGIC.equals(magic))
             {
-                throw new RuntimeException("地图格式错误");
+                throw new MapLoadException("地图格式错误");
             }
             int version = buf.readInt();
             if (version > MAP_VERSION)
             {
-                throw new RuntimeException("地图版本不支持");
+                throw new MapLoadException("地图版本不支持");
             }
             buf.skipReader(11*4);
         }
@@ -120,7 +119,7 @@ public class MapManager {
             String tag = new String(buf.readBytes(4));
             if (!TAG_INFLUENCE.equals(tag))
             {
-                throw new RuntimeException("势力标识错误");
+                throw new MapLoadException("势力标识错误");
             }
             int count = buf.readInt();
             Influence[] influences = new Influence[count];
@@ -138,7 +137,7 @@ public class MapManager {
             String tag = new String(buf.readBytes(4));
             if (!TAG_REGION.equals(tag))
             {
-                throw new RuntimeException("区块标识错误");
+                throw new MapLoadException("区块标识错误");
             }
             int count = buf.readInt();
             buf.skipReader(4);
@@ -171,7 +170,7 @@ public class MapManager {
             String tag = new String(buf.readBytes(4));
             if (!TAG_TILE.equals(tag))
             {
-                throw new RuntimeException("贴片标识错误");
+                throw new MapLoadException("贴片标识错误");
             }
             int rows = buf.readInt();
             int cols = buf.readInt();
@@ -183,7 +182,7 @@ public class MapManager {
             String tag = new String(buf.readBytes(4));
             if (!TAG_FLAG.equals(tag))
             {
-                throw new RuntimeException("贴片标志标识错误");
+                throw new MapLoadException("贴片标志标识错误");
             }
             int rows = buf.readInt();
             int cols = buf.readInt();

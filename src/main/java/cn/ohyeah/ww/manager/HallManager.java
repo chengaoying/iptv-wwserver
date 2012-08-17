@@ -21,12 +21,16 @@ public class HallManager {
         roles = new ConcurrentHashMap<>();
     }
 
-    public ServerRoleInfo lookupRole(int roleId) {
-        return roles.get(roleId);
-    }
-
     public ServerHallInfo lookupHall(int hallId) {
         return hallInfo;
+    }
+
+    public ServerRoomInfo lookupRoom(int roomId) {
+        return hallInfo.getRooms().get(roomId);
+    }
+
+    public ServerTableInfo lookupTable(int roomId, int tableId) {
+        return lookupRoom(roomId).getTables().get(tableId);
     }
 
     private boolean userTokenEquals(int[] token1, int[] token2) {
@@ -60,6 +64,12 @@ public class HallManager {
         return new int[] {1,2,3,4};
     }
 
+    public ServerRoleInfo queryAndCheckRole(int roleId, int[] token) {
+        ServerRoleInfo roleInfo = checkReadRole(roleId);
+        checkUserToken(roleInfo.getTolen(), token);
+        return roleInfo;
+    }
+
     public void loginHall(ServerRoleInfo roleInfo, int hallId) {
         int[] token = createUserToken(roleInfo);
         roleInfo.setTolen(token);
@@ -81,59 +91,6 @@ public class HallManager {
         ServerRoleInfo roleInfo = checkReadRole(roleId);
         checkUserToken(roleInfo.getTolen(), token);
         return hallInfo.createClientHallInfo();
-    }
-
-    public void loginRoom(int roleId, int[] token, int roomId) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerRoomInfo roomInfo = hallInfo.getRooms().get(roomId);
-        roomInfo.roleLogin(roleInfo);
-    }
-
-    public void quitRoom(int roleId, int[] token) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerRoomInfo roomInfo = roleInfo.getRoom();
-        if (roomInfo != null) {
-            roomInfo.roleQuit(roleInfo);
-        }
-    }
-
-    public ClientRoomInfo queryRoomInfo(int roleId, int[] token) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerRoomInfo roomInfo = roleInfo.getRoom();
-        return roomInfo.createClientRoomInfo();
-    }
-
-    public void joinTable(int roleId, int[] token, int tableId) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerTableInfo tableInfo = roleInfo.getRoom().getTables().get(tableId);
-        tableInfo.roleJoin(roleInfo);
-    }
-
-    public void quickJoinTable(int roleId, int[] token) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerRoomInfo roomInfo = roleInfo.getRoom();
-        roomInfo.roleQuickJoin(roleInfo);
-    }
-
-    public void quitTable(int roleId, int[] token) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerTableInfo tableInfo = roleInfo.getTable();
-        if (tableInfo != null) {
-            tableInfo.roleQuit(roleInfo);
-        }
-    }
-
-    public ClientTableInfo queryTableInfo(int roleId, int[] token) {
-        ServerRoleInfo roleInfo = checkReadRole(roleId);
-        checkUserToken(roleInfo.getTolen(), token);
-        ServerTableInfo tableInfo = roleInfo.getTable();
-        return tableInfo.createClientTableInfo();
     }
 
 }

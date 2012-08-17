@@ -27,12 +27,7 @@ public class HallService {
         this.roleDao = roleDao;
     }
 
-    public int[] login(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        String roleName = (String)params.get("roleName");
-        int hallId = (Integer)params.get("hallId");
-        Channel channel = (Channel)params.get("channel");
-
+    public int[] login(String roleName, String password, int hallId, Channel channel) {
         GameRole role = roleDao.readByName(roleName);
         ServerRoleInfo roleInfo = new ServerRoleInfo();
         roleInfo.setChannel(channel);
@@ -41,16 +36,12 @@ public class HallService {
         return roleInfo.getTolen();
     }
 
-    public void quit(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        int[] token = (int[])params.get("token");
+    public void quit(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.quitHall(roleId, token);
         channelManager.removeChannelRole(roleInfo.getChannel());
     }
 
-    public ClientHallInfo queryInfo(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        int[] token = (int[])params.get("token");
+    public ClientHallInfo queryInfo(int roleId, int[] token) {
         return hallManager.queryHallInfo(roleId, token);
     }
 }

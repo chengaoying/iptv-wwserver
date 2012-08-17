@@ -2,6 +2,8 @@ package cn.ohyeah.ww.service;
 
 import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.manager.HallManager;
+import cn.ohyeah.ww.server.model.ServerRoleInfo;
+import cn.ohyeah.ww.server.model.ServerRoomInfo;
 
 import java.util.Map;
 
@@ -12,28 +14,29 @@ public class RoomService {
         this.hallManager = hallManager;
     }
 
-    public void login(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        int[] token = (int[])params.get("token");
-        int roomId = (Integer)params.get("roomId");
-        hallManager.loginRoom(roleId, token, roomId);
+    public void login(int roleId, int[] token, int roomId) {
+        ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
+        ServerRoomInfo roomInfo = hallManager.lookupRoom(roomId);
+        roomInfo.roleLogin(roleInfo);
     }
 
-    public void quickJoinTable(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        int[] token = (int[])params.get("token");
-        hallManager.quickJoinTable(roleId, token);
+    public void quickJoinTable(int roleId, int[] token) {
+        ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        roomInfo.roleQuickJoin(roleInfo);
     }
 
-    public void quit(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        int[] token = (int[])params.get("token");
-        hallManager.quitRoom(roleId, token);
+    public void quit(int roleId, int[] token) {
+        ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        if (roomInfo != null) {
+            roomInfo.roleQuit(roleInfo);
+        }
     }
 
-    public ClientRoomInfo queryInfo(Map<String, Object> params) {
-        int roleId = (Integer)params.get("roleId");
-        int[] token = (int[])params.get("token");
-        return hallManager.queryRoomInfo(roleId, token);
+    public ClientRoomInfo queryInfo(int roleId, int[] token) {
+        ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        return roomInfo.createClientRoomInfo();
     }
 }
