@@ -5,19 +5,40 @@ public class Constant {
     public static final byte PROTOCOL_VERSION = 2;
     public static final byte PROTOCOL_TAG_GAME_SERVER = 0X0F;
 
-    public static final short EC_ROLE_OFFLINE = -1;
-    public static final short EC_ROLE_IDLE_TIMEOUT = -2;
-    public static final short EC_HALL_FULL = -3;
-    public static final short EC_ROOM_FULL = -4;
-    public static final short EC_TABLE_FULL = -5;
-    public static final short EC_ROUND_TIMEOUT = -6;
-    public static final short EC_GAME_STATE_INCONSISTENT = -7;
-    public static final short EC_LOAD_MAP_FAILED = -8;
+    /**
+     * 账号相关错误
+     */
+    public static final short EC_ROLE_NAME_NOT_EXIST = -1001;
+    public static final short EC_ROLE_PASSWORD_ERROR = -1002;
+    /**
+     * 大厅相关错误
+     */
+    public static final short EC_ROLE_REPEAT_LOGIN = -1101;
+    public static final short EC_ROLE_OFFLINE = -1102;
+    public static final short EC_ROLE_IDLE_TIMEOUT = -1103;
+    public static final short EC_HALL_FULL = -1104;
+    /**
+     * 房间相关错误
+     */
+    public static final short EC_ROOM_FULL = -1205;
+    /**
+     * 游戏桌相关错误
+     */
+    public static final short EC_TABLE_FULL = -1306;
+    /**
+     * 游戏状态相关错误
+     */
+    public static final short EC_ROUND_TIMEOUT = -1401;
+    public static final short EC_GAME_STATE_INCONSISTENT = -1402;
+    public static final short EC_LOAD_MAP_FAILED = -1403;
 
 
     public static final String getErrorMessage(int errorCode) {
         String msg = "未知错误";
         switch (errorCode) {
+            case EC_ROLE_NAME_NOT_EXIST: msg = "账号不存在"; break;
+            case EC_ROLE_PASSWORD_ERROR: msg = "账号密码错误"; break;
+            case EC_ROLE_REPEAT_LOGIN: msg = "账号重复登录"; break;
             case EC_ROLE_OFFLINE: msg = "账号已掉线"; break;
             case EC_ROLE_IDLE_TIMEOUT: msg = "长时间没有活动"; break;
             case EC_HALL_FULL: msg = "大厅人数已满"; break;

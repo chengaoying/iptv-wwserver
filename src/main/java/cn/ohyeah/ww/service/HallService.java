@@ -5,6 +5,7 @@ import cn.ohyeah.ww.dao.IGameRoleDao;
 import cn.ohyeah.ww.manager.ChannelManager;
 import cn.ohyeah.ww.manager.HallManager;
 import cn.ohyeah.ww.model.GameRole;
+import cn.ohyeah.ww.protocol.Constant;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.jboss.netty.channel.Channel;
 
@@ -29,6 +30,9 @@ public class HallService {
 
     public int[] login(String roleName, String password, int hallId, Channel channel) {
         GameRole role = roleDao.readByName(roleName);
+        if (role == null) {
+            throw new ServiceException(Constant.getErrorMessage(Constant.EC_ROLE_NAME_NOT_EXIST));
+        }
         ServerRoleInfo roleInfo = new ServerRoleInfo();
         roleInfo.setChannel(channel);
         hallManager.loginHall(roleInfo, hallId);

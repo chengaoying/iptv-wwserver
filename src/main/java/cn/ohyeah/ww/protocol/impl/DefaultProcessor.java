@@ -95,7 +95,7 @@ public class DefaultProcessor {
                 String msg = String.format("协议处理器方法无法访问, (cmd=%s, userdata=%s)", cmd, userdata);
                 throw new ProtocolProcessException(msg);
             } catch (InvocationTargetException e) {
-                throw new ProtocolProcessException(e.getCause());
+                throw new ProtocolProcessException(e.getCause().getMessage(), e.getCause());
             }
         }
         else {
