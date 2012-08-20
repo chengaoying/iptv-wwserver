@@ -5,11 +5,15 @@ import cn.ohyeah.ww.client.model.ClientTableInfo;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.TableService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
+@Named
 public class TableProcessor extends AbstractProcessor {
     private TableService tableService;
 
+    @Inject
     public void setTableService(TableService tableService) {
         this.tableService = tableService;
     }

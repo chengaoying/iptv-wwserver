@@ -13,10 +13,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
-
+@Named
 public class DefaultProcessor {
     private static Log log = LogFactory.getLog(DefaultProcessor.class);
     private String platformServer;
@@ -25,18 +29,20 @@ public class DefaultProcessor {
     private Map<String, Method> methods;
     private Map<String, IProcessor> processors;
 
+    public DefaultProcessor() {
+        processors = new HashMap<>();
+    }
+
+    @Inject
     public void setPlatformServer(String platformServer) {
         this.platformServer = platformServer;
     }
-
+    @Inject
     public void setHttpClient(DefaultHttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
-    public void setProcessors(Map<String, IProcessor> processors) {
-        this.processors = processors;
-    }
-
+    @PostConstruct
     protected void initProcessors() {
         String[] cmds = Constant.getProtocolCmds();
         String procName = "";

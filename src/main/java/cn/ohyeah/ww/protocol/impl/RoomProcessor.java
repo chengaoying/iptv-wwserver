@@ -5,11 +5,15 @@ import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.RoomService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
+@Named
 public class RoomProcessor extends AbstractProcessor {
     private RoomService roomService;
 
+    @Inject
     public void setRoomService(RoomService roomService) {
         this.roomService = roomService;
     }

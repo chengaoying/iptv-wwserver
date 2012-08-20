@@ -1,8 +1,9 @@
 package cn.ohyeah.ww.service;
 
 
-import java.util.Map;
+import javax.inject.Named;
 
+@Named
 public class GameService {
 
 

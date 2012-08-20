@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ServerRoomInfo {
     private final int roomId;
-    private final int limitPlayer;
     private String roomName;
+    private final int limitPlayer;
     private AtomicInteger playerCount;
     private List<ServerTableInfo> tables;
     private Map<Integer, ServerRoleInfo> roles;

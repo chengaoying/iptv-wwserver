@@ -4,11 +4,15 @@ import cn.ohyeah.stb.util.ByteBuffer;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.GameService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
+@Named
 public class GameProcessor extends AbstractProcessor {
     private GameService gameService;
 
+    @Inject
     public void setGameService(GameService gameService) {
         this.gameService = gameService;
     }

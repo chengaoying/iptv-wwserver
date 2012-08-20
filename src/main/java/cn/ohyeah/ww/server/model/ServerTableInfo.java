@@ -3,28 +3,27 @@ package cn.ohyeah.ww.server.model;
 import cn.ohyeah.ww.client.model.ClientRoleDesc;
 import cn.ohyeah.ww.client.model.ClientTableDesc;
 import cn.ohyeah.ww.client.model.ClientTableInfo;
+import cn.ohyeah.ww.server.game.GameRoleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerTableInfo {
     private final int tableId;
-    private final int limitPlayers;
     private String tableName;
-    volatile private int state;
-    private List<ServerRoleInfo> players;
+    private final int limitPlayers;
     private ServerRoomInfo room;
-    volatile private TableGameState gameState;
+    private List<ServerRoleInfo> players;
+    volatile private ServerGameInfo gameInfo;
 
     public ServerTableInfo(int id, int limitPlayers) {
         this.tableId = id;
         this.limitPlayers = limitPlayers;
         this.tableName = "";
-        this.players = new CopyOnWriteArrayList<>();
+        this.players = new ArrayList<>(limitPlayers);
     }
 
-    public boolean isThirstForRole() {
+    private boolean isThirstForRole() {
         return limitPlayers-players.size()<=2;
     }
 
@@ -46,19 +45,31 @@ public class ServerTableInfo {
         return result;
     }
 
-    public boolean getReady() {
+    synchronized public boolean getReady() {
+        if (players.size() < limitPlayers) {
+            return false;
+        }
         for (ServerRoleInfo roleInfo : players) {
             if (!roleInfo.isReady()) {
                return false;
             }
         }
-        this.gameState = new TableGameState();
+        List<GameRoleInfo> gameRoles = new ArrayList<>(limitPlayers);
+        for (ServerRoleInfo roleInfo : players) {
+            gameRoles.add(new GameRoleInfo(roleInfo));
+        }
+        this.gameInfo = new ServerGameInfo(this, gameRoles);
         return true;
     }
 
-    public boolean roleQuit(ServerRoleInfo roleInfo) {
+    public boolean isReady() {
+        return gameInfo !=null;
+    }
+
+    synchronized public boolean roleQuit(ServerRoleInfo roleInfo) {
         boolean result = players.remove(roleInfo);
         if (result) {
+            roleInfo.setGameState(null);
             roleInfo.setTable(null);
         }
         return result;
@@ -108,11 +119,19 @@ public class ServerTableInfo {
         this.tableName = tableName;
     }
 
-    public int getState() {
-        return state;
+    public List<ServerRoleInfo> getPlayers() {
+        return players;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setPlayers(List<ServerRoleInfo> players) {
+        this.players = players;
+    }
+
+    public ServerGameInfo getGameInfo() {
+        return gameInfo;
+    }
+
+    public void setGameInfo(ServerGameInfo gameInfo) {
+        this.gameInfo = gameInfo;
     }
 }

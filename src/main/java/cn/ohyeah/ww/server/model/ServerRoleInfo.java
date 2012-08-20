@@ -20,6 +20,15 @@ public class ServerRoleInfo {
         ClientRoleDesc roleDesc = new ClientRoleDesc();
         roleDesc.setRoleId(role.getRoleId());
         roleDesc.setRoleName(role.getRoleName());
+        if (table!=null && table.isReady()) {
+            roleDesc.setStatePlaying();
+        }
+        else if (isReady()) {
+            roleDesc.setStatePreparing();
+        }
+        else {
+            roleDesc.setStateIdle();
+        }
         return roleDesc;
     }
 
@@ -30,9 +39,11 @@ public class ServerRoleInfo {
     }
 
     public void prepare(int[] propIds) {
-        RoleGameState state = new RoleGameState();
-        state.setPrepareProps(propIds);
-        this.gameState = state;
+        if (!isReady()) {
+            RoleGameState state = new RoleGameState();
+            state.setPrepareProps(propIds);
+            this.gameState = state;
+        }
     }
 
     public boolean isReady() {

@@ -3,6 +3,7 @@ package cn.ohyeah.ww.manager;
 import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.client.model.ClientTableInfo;
+import cn.ohyeah.ww.protocol.Constant;
 import cn.ohyeah.ww.protocol.impl.ProtocolProcessException;
 import cn.ohyeah.ww.server.model.ServerHallInfo;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
@@ -10,9 +11,11 @@ import cn.ohyeah.ww.server.model.ServerRoomInfo;
 import cn.ohyeah.ww.server.model.ServerTableInfo;
 import org.jboss.netty.channel.Channel;
 
+import javax.inject.Named;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Named
 public class HallManager {
     private ServerHallInfo hallInfo;
     private Map<Integer, ServerRoleInfo> roles;
@@ -71,10 +74,15 @@ public class HallManager {
     }
 
     public void loginHall(ServerRoleInfo roleInfo, int hallId) {
-        int[] token = createUserToken(roleInfo);
-        roleInfo.setTolen(token);
-        if (hallInfo.roleLogin(roleInfo)) {
-            roles.put(roleInfo.getRole().getRoleId(), roleInfo);
+        if (!roles.containsKey(roleInfo.getRole().getRoleId())) {
+            int[] token = createUserToken(roleInfo);
+            roleInfo.setTolen(token);
+            if (hallInfo.roleLogin(roleInfo)) {
+                roles.put(roleInfo.getRole().getRoleId(), roleInfo);
+            }
+            else {
+                throw new ProtocolProcessException(Constant.getErrorMessage(Constant.EC_HALL_FULL));
+            }
         }
     }
 

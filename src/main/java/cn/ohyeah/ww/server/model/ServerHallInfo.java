@@ -3,10 +3,13 @@ package cn.ohyeah.ww.server.model;
 import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.client.model.ClientRoomDesc;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Named
 public class ServerHallInfo {
     private final int hallId;
     private final int limitPlayer;
@@ -14,6 +17,7 @@ public class ServerHallInfo {
     private AtomicInteger playerCount;
     private List<ServerRoomInfo> rooms;
 
+    @Inject
     public ServerHallInfo(int id, String name, int hallLimitPlayer) {
         this.hallId = id;
         this.hallName = name;
@@ -68,6 +72,7 @@ public class ServerHallInfo {
         return rooms;
     }
 
+    @Inject
     public void setRooms(List<ServerRoomInfo> rooms) {
         this.rooms = rooms;
     }

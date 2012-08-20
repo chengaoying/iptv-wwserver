@@ -5,11 +5,14 @@ import cn.ohyeah.ww.manager.HallManager;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import cn.ohyeah.ww.server.model.ServerRoomInfo;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
+@Named
 public class RoomService {
     private HallManager hallManager;
-
+    @Inject
     public void setHallManager(HallManager hallManager) {
         this.hallManager = hallManager;
     }

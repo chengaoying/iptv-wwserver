@@ -1,6 +1,9 @@
 package cn.ohyeah.ww.client.model;
 
-public class ClientRoomDesc {
+import cn.ohyeah.stb.util.ByteBuffer;
+import cn.ohyeah.ww.io.Serializable;
+
+public class ClientRoomDesc implements Serializable {
     private int roomId;
     private String roomName;
     private int playerCount;
@@ -27,5 +30,15 @@ public class ClientRoomDesc {
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
+    }
+
+    @Override
+    public void serialize(ByteBuffer buf) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void deserialize(ByteBuffer buf) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

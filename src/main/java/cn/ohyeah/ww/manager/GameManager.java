@@ -2,9 +2,11 @@ package cn.ohyeah.ww.manager;
 
 import cn.ohyeah.ww.server.model.ServerTableInfo;
 
+import javax.inject.Named;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Named
 public class GameManager {
     /**
      * 正在游戏的table

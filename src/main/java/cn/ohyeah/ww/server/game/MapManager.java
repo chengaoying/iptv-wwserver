@@ -4,11 +4,15 @@ import cn.ohyeah.stb.util.ByteBuffer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Named
 public class MapManager {
     private static final int MAP_VERSION = 2;
     private static final String MAP_MAGIC = "MWWM";
@@ -22,6 +26,15 @@ public class MapManager {
     private ConcurrentHashMap<Integer, MapNode[]> maps;
     private ConcurrentHashMap<Integer, MapInfo> mapInfos;
 
+    @Inject
+    public void setMapRootPath(String mapRootPath) {
+        this.mapRootPath = mapRootPath;
+    }
+    @Inject
+    public void setFileExt(String fileExt) {
+        this.fileExt = fileExt;
+    }
+    @PostConstruct
     synchronized public void initMap() {
         File mapDir = FileUtils.getFile(mapRootPath);
         if (mapDir!=null && mapDir.isDirectory()) {
@@ -65,10 +78,10 @@ public class MapManager {
         mapInfos.put(players, info);
     }
 
-    public MapNode randomLoadMap(int players) {
+    public GameMap randomLoadMap(int players) {
         MapNode[] mapNodes = maps.get(players);
         int rndInt = new Random().nextInt(mapNodes.length);
-        return mapNodes[rndInt];
+        return mapNodes[rndInt].getMap();
     }
 
 

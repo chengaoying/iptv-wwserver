@@ -1,10 +1,11 @@
 package cn.ohyeah.ww.client.model;
 
 import cn.ohyeah.stb.util.ByteBuffer;
+import cn.ohyeah.ww.io.Serializable;
 
 import java.util.List;
 
-public class ClientHallInfo {
+public class ClientHallInfo implements Serializable {
     private int hallId;
     private String hallName;
     private int playerCount;
@@ -42,11 +43,13 @@ public class ClientHallInfo {
         this.rooms = rooms;
     }
 
+    @Override
     public void serialize(ByteBuffer buf) {
-        //TODO
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
     public void deserialize(ByteBuffer buf) {
-        //TODO
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

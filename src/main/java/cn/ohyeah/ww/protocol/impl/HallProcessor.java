@@ -5,12 +5,16 @@ import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.HallService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
+@Named
 public class HallProcessor extends AbstractProcessor {
 
     private HallService hallService;
 
+    @Inject
     public void setHallService(HallService hallService) {
         this.hallService = hallService;
     }

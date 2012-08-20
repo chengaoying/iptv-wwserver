@@ -6,9 +6,11 @@ import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.ChannelGroupFuture;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
+import javax.inject.Named;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Named
 public class ChannelManager {
     private Map<Channel, ServerRoleInfo> channelRoles;
 

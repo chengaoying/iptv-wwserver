@@ -1,8 +1,11 @@
 package cn.ohyeah.ww.client.model;
 
+import cn.ohyeah.stb.util.ByteBuffer;
+import cn.ohyeah.ww.io.Serializable;
+
 import java.util.List;
 
-public class ClientTableDesc {
+public class ClientTableDesc implements Serializable {
     private int tableId;
     private String tableName;
     private List<ClientRoleDesc> players;
@@ -29,5 +32,15 @@ public class ClientTableDesc {
 
     public void setPlayers(List<ClientRoleDesc> players) {
         this.players = players;
+    }
+
+    @Override
+    public void serialize(ByteBuffer buf) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void deserialize(ByteBuffer buf) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

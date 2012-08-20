@@ -5,6 +5,12 @@ public class Constant {
     public static final byte PROTOCOL_VERSION = 2;
     public static final byte PROTOCOL_TAG_GAME_SERVER = 0X0F;
 
+
+    public static final byte PUSH_MSG_ROOM_INFO = 0;
+    public static final byte PUSH_MSG_TABLE_INFO = 1;
+    public static final byte PUSH_MSG_GAME_INFO = 2;
+
+
     /**
      * ’À∫≈œ‡πÿ¥ÌŒÛ
      */

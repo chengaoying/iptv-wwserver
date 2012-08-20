@@ -3,15 +3,6 @@ package cn.ohyeah.ww.server.model;
 import cn.ohyeah.ww.server.game.Influence;
 
 public class RoleGameState {
-    /**
-     * ×¼±¸×´Ì¬
-     */
-    private static final byte STATE_PREPARING = 0;
-    /**
-     * ÓÎÏ·×´Ì¬
-     */
-    private static final byte STATE_PLAYING = 1;
-
     private Influence influence;
     private int[] prepareProps;
     private int[] freeProps;

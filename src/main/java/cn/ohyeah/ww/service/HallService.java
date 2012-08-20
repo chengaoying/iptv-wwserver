@@ -9,21 +9,25 @@ import cn.ohyeah.ww.protocol.Constant;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.jboss.netty.channel.Channel;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
+@Named
 public class HallService {
     private ChannelManager channelManager;
     private HallManager hallManager;
     private IGameRoleDao roleDao;
 
+    @Inject
     public void setHallManager(HallManager hallManager) {
         this.hallManager = hallManager;
     }
-
+    @Inject
     public void setChannelManager(ChannelManager channelManager) {
         this.channelManager = channelManager;
     }
-
+    @Inject
     public void setGameRoleDao(IGameRoleDao roleDao) {
         this.roleDao = roleDao;
     }
