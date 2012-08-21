@@ -26,7 +26,7 @@ public class ServerHallInfo {
 
     synchronized public boolean roleLogin(ServerRoleInfo roleInfo) {
         if (playerCount.get() < limitPlayer) {
-            roleInfo.setHall(this);
+            roleInfo.setServerHall(this);
             playerCount.incrementAndGet();
             return true;
         }
@@ -34,7 +34,7 @@ public class ServerHallInfo {
     }
 
     public boolean roleQuit(ServerRoleInfo roleInfo) {
-        roleInfo.setHall(null);
+        roleInfo.setServerHall(null);
         playerCount.decrementAndGet();
         return true;
     }

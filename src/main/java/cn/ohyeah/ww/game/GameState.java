@@ -1,7 +1,7 @@
 package cn.ohyeah.ww.game;
 
-public class GameState {
+public class GameState {/*
     private GameRoleInfo curRole;
     private long startMillis;
-    private Map map;
+    private Map map;*/
 }

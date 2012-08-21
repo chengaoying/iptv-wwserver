@@ -6,8 +6,15 @@ import cn.ohyeah.ww.io.Serializable;
 import java.util.List;
 
 public class ClientGameInfo implements Serializable {
-    private int curRole;
+    /**
+     * 游戏开始帧
+     */
     private boolean firstFrame;
+    /**
+     * 游戏结束帧
+     */
+    private boolean lastFrame;
+    private int curRole;
     private List<ClientRoleDesc> roles;
 
     public int getCurRole() {

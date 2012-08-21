@@ -6,13 +6,11 @@ public class GameMap {
 
     protected GameMap() {}
 
-    public Region[] getRegions()
-    {
+    public Region[] getRegions() {
     	return regions;
     }
 
-    public Influence[] getInfluences()
-    {
+    public Influence[] getInfluences() {
     	return influences;
     }
 
@@ -24,18 +22,21 @@ public class GameMap {
         this.influences = influences;
     }
 
-    protected Influence getInfluence(int id)
-    {
+    protected Influence getInfluence(int id) {
+        if (id < 0 || id >= influences.length) {
+            return null;
+        }
     	return influences[id];
     }
 
-    protected Influence getInfluence(Region region)
-    {
+    protected Influence getInfluence(Region region) {
     	return influences[region.getInfluenceId()];
     }
 
-    protected Region getRegion(int id)
-    {
+    protected Region getRegion(int id) {
+        if (id < 0 || id >= regions.length) {
+            return null;
+        }
     	return regions[id];
     }
 
@@ -66,8 +67,7 @@ public class GameMap {
 		return regions;
 	}
 
-    public Region moveLeft(Region region)
-    {
+    public Region moveLeft(Region region) {
     	if (region.getLeftRegionId() >= 0)
     	{
     		return regions[region.getLeftRegionId()];
@@ -75,8 +75,7 @@ public class GameMap {
     	return region;
     }
 
-    public Region moveRight(Region region)
-    {
+    public Region moveRight(Region region) {
     	if (region.getRightRegionId() >= 0)
     	{
     		return regions[region.getRightRegionId()];
@@ -84,8 +83,7 @@ public class GameMap {
     	return region;
     }
 
-    public Region moveUp(Region region)
-    {
+    public Region moveUp(Region region) {
     	if (region.getUpRegionId() >= 0)
     	{
     		return regions[region.getUpRegionId()];
@@ -93,8 +91,7 @@ public class GameMap {
     	return region;
     }
 
-    public Region moveDown(Region region)
-    {
+    public Region moveDown(Region region) {
     	if (region.getDownRegionId() >= 0)
     	{
     		return regions[region.getDownRegionId()];

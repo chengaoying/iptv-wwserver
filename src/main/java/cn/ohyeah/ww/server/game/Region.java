@@ -21,12 +21,27 @@ public class Region {
         this.attackPropId = attackPropId;
     }
 
+    public void setAttackPropInvalid() {
+        this.attackPropId = -1;
+    }
+
+    public boolean isAttackPropInvalid() {
+        return this.attackPropId == -1;
+    }
+
     public int getDefensePropId() {
         return defensePropId;
     }
 
     public void setDefensePropId(int defensePropId) {
         this.defensePropId = defensePropId;
+    }
+
+    public void setDefensePropInvalid() {
+        this.defensePropId = -1;
+    }
+    public boolean isDefensePropInvalid() {
+        return this.defensePropId == -1;
     }
 
     public short getId() {

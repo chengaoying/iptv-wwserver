@@ -3,7 +3,6 @@ package cn.ohyeah.ww.server.model;
 import cn.ohyeah.ww.client.model.ClientRoleDesc;
 import cn.ohyeah.ww.client.model.ClientTableDesc;
 import cn.ohyeah.ww.client.model.ClientTableInfo;
-import cn.ohyeah.ww.server.game.GameRoleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +11,9 @@ public class ServerTableInfo {
     private final int tableId;
     private String tableName;
     private final int limitPlayers;
-    private ServerRoomInfo room;
+    private ServerRoomInfo serverRoom;
     private List<ServerRoleInfo> players;
-    volatile private ServerGameInfo gameInfo;
+    volatile private ServerGameInfo serverGame;
 
     public ServerTableInfo(int id, int limitPlayers) {
         this.tableId = id;
@@ -39,7 +38,7 @@ public class ServerTableInfo {
         if (players.size() < limitPlayers) {
             result = players.add(roleInfo);
             if (result) {
-                roleInfo.setTable(this);
+                roleInfo.setServerTable(this);
             }
         }
         return result;
@@ -54,23 +53,23 @@ public class ServerTableInfo {
                return false;
             }
         }
-        List<GameRoleInfo> gameRoles = new ArrayList<>(limitPlayers);
+        List<RoleGameInfo> roleGames = new ArrayList<>(limitPlayers);
         for (ServerRoleInfo roleInfo : players) {
-            gameRoles.add(new GameRoleInfo(roleInfo));
+            roleGames.add(new RoleGameInfo(roleInfo));
         }
-        this.gameInfo = new ServerGameInfo(this, gameRoles);
+        this.serverGame = new ServerGameInfo(this, roleGames);
         return true;
     }
 
     public boolean isReady() {
-        return gameInfo !=null;
+        return serverGame !=null;
     }
 
     synchronized public boolean roleQuit(ServerRoleInfo roleInfo) {
         boolean result = players.remove(roleInfo);
         if (result) {
-            roleInfo.setGameState(null);
-            roleInfo.setTable(null);
+            roleInfo.setRoleGame(null);
+            roleInfo.setServerTable(null);
         }
         return result;
     }
@@ -99,12 +98,12 @@ public class ServerTableInfo {
         return ctableInfo;
     }
 
-    public ServerRoomInfo getRoom() {
-        return room;
+    public ServerRoomInfo getServerRoom() {
+        return serverRoom;
     }
 
-    public void setRoom(ServerRoomInfo room) {
-        this.room = room;
+    public void setServerRoom(ServerRoomInfo serverRoom) {
+        this.serverRoom = serverRoom;
     }
 
     public int getTableId() {
@@ -127,11 +126,11 @@ public class ServerTableInfo {
         this.players = players;
     }
 
-    public ServerGameInfo getGameInfo() {
-        return gameInfo;
+    public ServerGameInfo getServerGame() {
+        return serverGame;
     }
 
-    public void setGameInfo(ServerGameInfo gameInfo) {
-        this.gameInfo = gameInfo;
+    public void setServerGame(ServerGameInfo serverGame) {
+        this.serverGame = serverGame;
     }
 }

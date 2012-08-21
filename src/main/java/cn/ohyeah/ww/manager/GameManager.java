@@ -1,5 +1,6 @@
 package cn.ohyeah.ww.manager;
 
+import cn.ohyeah.ww.server.model.ServerGameInfo;
 import cn.ohyeah.ww.server.model.ServerTableInfo;
 
 import javax.inject.Named;
@@ -11,23 +12,17 @@ public class GameManager {
     /**
      * 正在游戏的table
      */
-    private Map<Integer, ServerTableInfo> tables;
+    private Map<ServerTableInfo, ServerGameInfo> tables;
 
     public GameManager() {
         tables = new ConcurrentHashMap<>();
     }
 
-    private int getKey(ServerTableInfo tableInfo) {
-        return tableInfo.getRoom().getRoomId()*100+tableInfo.getTableId();
+    public ServerGameInfo addGameTable(ServerGameInfo gameInfo) {
+        return tables.put(gameInfo.getServerTable(), gameInfo);
     }
 
-    public void addGameTable(ServerTableInfo tableInfo) {
-        int key = getKey(tableInfo);
-        tables.put(key, tableInfo);
-    }
-
-    public void removeGameTable(ServerTableInfo tableInfo) {
-        int key = getKey(tableInfo);
-        tables.remove(key);
+    public ServerGameInfo removeGameTable(ServerTableInfo tableInfo) {
+        return tables.remove(tableInfo);
     }
 }

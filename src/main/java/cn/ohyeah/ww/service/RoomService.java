@@ -7,7 +7,6 @@ import cn.ohyeah.ww.server.model.ServerRoomInfo;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Map;
 
 @Named
 public class RoomService {
@@ -25,13 +24,13 @@ public class RoomService {
 
     public void quickJoinTable(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        ServerRoomInfo roomInfo = roleInfo.getServerRoom();
         roomInfo.roleQuickJoin(roleInfo);
     }
 
     public void quit(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        ServerRoomInfo roomInfo = roleInfo.getServerRoom();
         if (roomInfo != null) {
             roomInfo.roleQuit(roleInfo);
         }
@@ -39,7 +38,7 @@ public class RoomService {
 
     public ClientRoomInfo queryInfo(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerRoomInfo roomInfo = roleInfo.getRoom();
+        ServerRoomInfo roomInfo = roleInfo.getServerRoom();
         return roomInfo.createClientRoomInfo();
     }
 }

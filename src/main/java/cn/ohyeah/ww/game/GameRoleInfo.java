@@ -1,6 +1,6 @@
 package cn.ohyeah.ww.game;
 
-public class GameRoleInfo {
+public class GameRoleInfo {/*
     private ServerRoleInfo roleInfo;
     private Influence influence;
     private int[] prepareProps;
@@ -45,5 +45,5 @@ public class GameRoleInfo {
 
     public void setRoundStartMillis(long roundStartMillis) {
         this.roundStartMillis = roundStartMillis;
-    }
+    }*/
 }

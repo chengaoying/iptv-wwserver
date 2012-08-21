@@ -3,41 +3,44 @@ package cn.ohyeah.ww.server.model;
 import cn.ohyeah.ww.client.model.ClientGameInfo;
 import cn.ohyeah.ww.client.model.ClientRoleDesc;
 import cn.ohyeah.ww.server.game.GameMap;
-import cn.ohyeah.ww.server.game.GameRoleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServerGameInfo {
-    private ServerTableInfo table;
-    private List<GameRoleInfo> gameRoles;
-    private int curRole;
-    private long startMillis;
+    private ServerTableInfo serverTable;
+    private List<RoleGameInfo> roleGames;
+    private int curRoleIndex;
+    volatile private long startMillis;
     private GameMap gameMap;
 
-    public ServerGameInfo(ServerTableInfo table, List<GameRoleInfo> gameRoles) {
-        this.table = table;
-        this.gameRoles = gameRoles;
-        this.curRole = 0;
+    public ServerGameInfo(ServerTableInfo serverTable, List<RoleGameInfo> roleGames) {
+        this.serverTable = serverTable;
+        this.roleGames = roleGames;
+        this.curRoleIndex = 0;
     }
 
     public ClientGameInfo createClientGameInfo() {
         ClientGameInfo cgInfo = new ClientGameInfo();
-        List<ClientRoleDesc> roleDescList = new ArrayList<>(gameRoles.size());
-        for (GameRoleInfo gameRole : gameRoles) {
-            roleDescList.add(gameRole.getRoleInfo().createClientRoleDesc());
+        List<ClientRoleDesc> roleDescList = new ArrayList<>(roleGames.size());
+        for (RoleGameInfo roleGame : roleGames) {
+            roleDescList.add(roleGame.getServerRole().createClientRoleDesc());
         }
-        cgInfo.setCurRole(curRole);
+        cgInfo.setCurRole(curRoleIndex);
         cgInfo.setRoles(roleDescList);
         return cgInfo;
     }
 
-    public int getCurRole() {
-        return curRole;
+    public RoleGameInfo getCurGameRole() {
+        return roleGames.get(curRoleIndex);
     }
 
-    public void setCurRole(int curRole) {
-        this.curRole = curRole;
+    public int getCurRoleIndex() {
+        return curRoleIndex;
+    }
+
+    public void setCurRoleIndex(int curRoleIndex) {
+        this.curRoleIndex = curRoleIndex;
     }
 
     public long getStartMillis() {
@@ -54,5 +57,9 @@ public class ServerGameInfo {
 
     public void setGameMap(GameMap gameMap) {
         this.gameMap = gameMap;
+    }
+
+    public ServerTableInfo getServerTable() {
+        return serverTable;
     }
 }

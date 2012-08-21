@@ -1,6 +1,6 @@
 package cn.ohyeah.ww.model;
 
-public class GameProps {
+public class RoleProps {
     private int roleId;
     private int prop1;
     private int prop2;
