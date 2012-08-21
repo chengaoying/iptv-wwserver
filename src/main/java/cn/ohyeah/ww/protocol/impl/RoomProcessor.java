@@ -36,7 +36,7 @@ public class RoomProcessor extends AbstractProcessor {
     }
 
 
-    public ByteBuffer quickJoin(ProcessContext context, ByteBuffer req) {
+    public ByteBuffer quickJoinTable(ProcessContext context, ByteBuffer req) {
         int roleId = req.readInt();
         int[] token = readToken(req);
         roomService.quickJoinTable(roleId, token);

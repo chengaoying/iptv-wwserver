@@ -1,17 +1,15 @@
 package cn.ohyeah.ww.server;
 
-import cn.halcyon.utils.ThreadSafeClientConnManagerUtil;
 import cn.ohyeah.stb.util.ByteBuffer;
 import cn.ohyeah.ww.protocol.ProcessFrame;
 import cn.ohyeah.ww.protocol.impl.DefaultProcessor;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RequestHandler extends SimpleChannelUpstreamHandler {
     private DefaultProcessor processor;
 

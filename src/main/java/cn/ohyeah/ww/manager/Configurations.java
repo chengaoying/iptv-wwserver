@@ -1,9 +1,39 @@
 package cn.ohyeah.ww.manager;
 
 
+import cn.ohyeah.ww.utils.ThreadSafeClientConnManagerUtil;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Service;
 
-@Service
+@Configuration
+@ImportResource({"classpath*:/beans.xml"})
 public class Configurations {
 
+    @Bean(name={"processorBasePackage"})
+    public String getProcessorBasePackage() {
+        return "cn.ohyeah.ww.protocol.impl";
+    }
+
+    @Bean(name={"platformServer"})
+    public String getPlatformServer() {
+        return "";
+    }
+
+    @Bean(name={"defaultHttpClient"})
+    public DefaultHttpClient buildDefaultHttpClient() {
+        return ThreadSafeClientConnManagerUtil.buildDefaultHttpClient();
+    }
+
+    @Bean(name={"mapFileRootPath"})
+    public String getMapFileRootPath() {
+        return "";
+    }
+
+    @Bean(name={"mapFileExt"})
+    public String getMapFileExt() {
+        return "";
+    }
 }

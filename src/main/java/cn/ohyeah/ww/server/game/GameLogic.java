@@ -2,9 +2,11 @@ package cn.ohyeah.ww.server.game;
 
 import cn.ohyeah.ww.client.message.GameRoundMessage;
 import cn.ohyeah.ww.client.message.GameStateMessage;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@Service
 public class GameLogic {
 
     private void checkDefenseCard(Region region) {

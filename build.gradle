@@ -25,6 +25,7 @@ dependencies {
     compile 'commons-io:commons-io:2.3'
     compile 'commons-lang:commons-lang:2.6'
     compile 'commons-logging:commons-logging:1.1.1'
+    compile 'cglib:cglib:2.2.2'
     compile 'org.springframework:spring-core:3.1.2.RELEASE'
     compile 'org.springframework:spring-tx:3.1.2.RELEASE'
     compile 'org.springframework:spring-context:3.1.2.RELEASE'

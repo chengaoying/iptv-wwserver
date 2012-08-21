@@ -14,9 +14,11 @@ import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class MessageSender {
     public HeadWrapper createHead(int cmd) {
         return new HeadWrapper.Builder().version(Constant.PROTOCOL_VERSION).type(1)

@@ -4,6 +4,7 @@ import cn.ohyeah.stb.util.ByteBuffer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -21,22 +22,26 @@ public class MapManager {
     private static final String TAG_TILE = "TILE";
     private static final String TAG_FLAG = "FLAG";
 
-    private String mapRootPath;
+    private String rootPath;
     private String fileExt;
     private ConcurrentHashMap<Integer, MapNode[]> maps;
     private ConcurrentHashMap<Integer, MapInfo> mapInfos;
 
     @Autowired
-    public void setMapRootPath(String mapRootPath) {
-        this.mapRootPath = mapRootPath;
+    @Qualifier("mapFileRootPath")
+    public void setRootPath(String rootPath) {
+        this.rootPath = rootPath;
     }
+
     @Autowired
+    @Qualifier("mapFileExt")
     public void setFileExt(String fileExt) {
         this.fileExt = fileExt;
     }
+
     @PostConstruct
     synchronized public void initMap() {
-        File mapDir = FileUtils.getFile(mapRootPath);
+        File mapDir = FileUtils.getFile(rootPath);
         if (mapDir!=null && mapDir.isDirectory()) {
             File[] subdirs = mapDir.listFiles();
             for (File file : subdirs) {

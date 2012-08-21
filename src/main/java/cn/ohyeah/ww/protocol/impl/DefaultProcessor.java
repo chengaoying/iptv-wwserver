@@ -1,11 +1,8 @@
 package cn.ohyeah.ww.protocol.impl;
 
-import cn.halcyon.utils.ThreadSafeClientConnManagerUtil;
+import cn.ohyeah.ww.protocol.*;
+import cn.ohyeah.ww.utils.ThreadSafeClientConnManagerUtil;
 import cn.ohyeah.stb.util.ByteBuffer;
-import cn.ohyeah.ww.protocol.Constant;
-import cn.ohyeah.ww.protocol.HeadWrapper;
-import cn.ohyeah.ww.protocol.IProcessor;
-import cn.ohyeah.ww.protocol.ProcessFrame;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -32,19 +30,29 @@ public class DefaultProcessor {
 
     public DefaultProcessor() {
         processors = new HashMap<>();
+        methods = new HashMap<>();
     }
 
     @Autowired
+    @Qualifier("platformServer")
     public void setPlatformServer(String platformServer) {
         this.platformServer = platformServer;
     }
+
     @Autowired
-    public void setHttpClient(DefaultHttpClient httpClient) {
-        this.httpClient = httpClient;
+    @Qualifier("processorBasePackage")
+    public void setProcessorBasePackage(String basePackage) {
+        this.processorBasePackage = basePackage;
+    }
+
+    @Autowired
+    @Qualifier("defaultHttpClient")
+    public void setDefaultHttpClient(DefaultHttpClient httpclient) {
+        this.httpClient = httpclient;
     }
 
     @PostConstruct
-    protected void initProcessors() {
+    private void initProcessors() {
         String[] cmds = Constant.getProtocolCmds();
         String procName = "";
         String methodName = "";
@@ -55,8 +63,9 @@ public class DefaultProcessor {
                 processors.put(cmds[i], proc);
                 String[] userdatas = Constant.getCmdUserdatas(i);
                 for (int j = 0; j < userdatas.length; ++j) {
-                    methodName = userdatas[i];
-                    Method m = proc.getClass().getMethod(methodName, ByteBuffer.class);
+                    methodName = userdatas[j];
+                    Method m = proc.getClass().getMethod(methodName, ProcessContext.class, ByteBuffer.class);
+                    System.out.println(cmds[i]+"."+userdatas[j]+" ==> "+m);
                     methods.put(cmds[i]+"."+userdatas[j], m);
                 }
             }
@@ -97,7 +106,9 @@ public class DefaultProcessor {
                 throw new ProtocolProcessException(msg);
             }
             try {
-                rsp = (ByteBuffer)method.invoke(proc, req);
+                ProcessContext context = new ProcessContext();
+                context.setChannel(frame.getChannel());
+                rsp = (ByteBuffer)method.invoke(proc, context, req);
             } catch (IllegalAccessException e) {
                 String msg = String.format("协议处理器方法无法访问, (cmd=%s, userdata=%s)", cmd, userdata);
                 throw new ProtocolProcessException(msg);
