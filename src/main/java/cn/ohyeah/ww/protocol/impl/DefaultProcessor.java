@@ -65,7 +65,6 @@ public class DefaultProcessor {
                 for (int j = 0; j < userdatas.length; ++j) {
                     methodName = userdatas[j];
                     Method m = proc.getClass().getMethod(methodName, ProcessContext.class, ByteBuffer.class);
-                    System.out.println(cmds[i]+"."+userdatas[j]+" ==> "+m);
                     methods.put(cmds[i]+"."+userdatas[j], m);
                 }
             }

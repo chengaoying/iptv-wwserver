@@ -83,8 +83,8 @@ public class Constant {
     public static enum CmdTableUserdata {
         JOIN,
         QUIT,
+        PREPARE,
         QUERY_INFO,
-        PREPARE
     };
 
     public static enum CmdGameUserdata {
