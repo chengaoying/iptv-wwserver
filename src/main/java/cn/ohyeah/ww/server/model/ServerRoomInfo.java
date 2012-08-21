@@ -15,7 +15,7 @@ public class ServerRoomInfo {
     private AtomicInteger playerCount;
     private List<ServerTableInfo> tables;
     private Map<Integer, ServerRoleInfo> roles;
-    private ServerHallInfo serverHall;
+    private ServerHallInfo hall;
 
     public ServerRoomInfo(final int id, final String name, final int roomLimitPlayer,
                           final int tableCount, final int tableLimitPlayer) {
@@ -26,7 +26,7 @@ public class ServerRoomInfo {
         this.tables = new ArrayList<ServerTableInfo>(tableCount);
         for (int i = 0; i < tableCount; ++i) {
             ServerTableInfo table = new ServerTableInfo(i, tableLimitPlayer);
-            table.setServerRoom(this);
+            table.setRoom(this);
             tables.set(i, table);
         }
     }
@@ -44,8 +44,8 @@ public class ServerRoomInfo {
 
     synchronized public boolean roleLogin(ServerRoleInfo roleInfo) {
         if (playerCount.get() < limitPlayer) {
-            roles.put(roleInfo.getRole().getRoleId(), roleInfo);
-            roleInfo.setServerRoom(this);
+            roles.put(roleInfo.getGameRole().getRoleId(), roleInfo);
+            roleInfo.setRoom(this);
             playerCount.incrementAndGet();
             return true;
         }
@@ -53,8 +53,8 @@ public class ServerRoomInfo {
     }
 
     public boolean roleQuit(ServerRoleInfo roleInfo) {
-        roles.remove(roleInfo.getRole().getRoleId());
-        roleInfo.setServerRoom(null);
+        roles.remove(roleInfo.getGameRole().getRoleId());
+        roleInfo.setRoom(null);
         playerCount.decrementAndGet();
         return true;
     }
@@ -84,12 +84,12 @@ public class ServerRoomInfo {
         return croomInfo;
     }
 
-    public ServerHallInfo getServerHall() {
-        return serverHall;
+    public ServerHallInfo getHall() {
+        return hall;
     }
 
-    public void setServerHall(ServerHallInfo serverHall) {
-        this.serverHall = serverHall;
+    public void setHall(ServerHallInfo hall) {
+        this.hall = hall;
     }
 
     public int getRoomId() {

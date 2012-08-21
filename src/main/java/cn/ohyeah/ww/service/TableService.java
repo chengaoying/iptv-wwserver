@@ -1,5 +1,6 @@
 package cn.ohyeah.ww.service;
 
+import cn.ohyeah.ww.client.message.GameStartMessage;
 import cn.ohyeah.ww.client.model.ClientGameInfo;
 import cn.ohyeah.ww.client.model.ClientTableInfo;
 import cn.ohyeah.ww.manager.GameManager;
@@ -39,24 +40,27 @@ public class TableService {
     public void prepare(int roleId, int[] token, int[] propIds) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
         roleInfo.prepare(propIds);
-        ServerTableInfo tableInfo = roleInfo.getServerTable();
+        ServerTableInfo tableInfo = roleInfo.getTable();
         if (tableInfo.getReady()) {
             //进入游戏状态
-            ServerGameInfo gameInfo = tableInfo.getServerGame();
-            gameInfo.setGameMap(mapManager.randomLoadMap(tableInfo.getTableId()));
+            ServerGameInfo gameInfo = tableInfo.getGame();
+            MapManager.MapNode mapNode = mapManager.randomLoadMap(tableInfo.getTableId());
+            if (mapNode.getPlayers() != gameInfo.getPlayerCount()) {
+                //TODO map error
+            }
+            gameInfo.setMap(mapNode.getMap());
+            gameInfo.assignInfluence();
             gameInfo.setStartMillis(System.currentTimeMillis());
             gameManager.addGameTable(gameInfo);
 
             //返回状态，其他玩家推送消息
-            ClientGameInfo cgInfo = gameInfo.createClientGameInfo();
-            cgInfo.setFirstFrame(true);
-            List<Channel> channels = new ArrayList<>(tableInfo.getPlayers().size()-1);
+            GameStartMessage startMessage = gameInfo.createGameStartMessage();
+            startMessage.setMapData(mapNode.getData());
             for(ServerRoleInfo player : tableInfo.getPlayers()) {
                 if (player != roleInfo) {
-                    channels.add(player.getChannel());
+                    messageSender.sendGameStart(player, startMessage);
                 }
             }
-            messageSender.sendGameInfo(channels, cgInfo);
         }
         else {
             //其他玩家推送消息
@@ -65,21 +69,21 @@ public class TableService {
             for(ServerRoleInfo player : tableInfo.getPlayers()) {
                 if (player != roleInfo) {
                     channels.add(player.getChannel());
+                    messageSender.sendTableInfo(player, ctInfo);
                 }
             }
-            messageSender.sendTableInfo(channels, ctInfo);
         }
     }
 
     public void join(int roleId, int[] token, int tableId) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerTableInfo tableInfo = hallManager.lookupTable(roleInfo.getServerRoom().getRoomId(), tableId);
+        ServerTableInfo tableInfo = hallManager.lookupTable(roleInfo.getRoom().getRoomId(), tableId);
         tableInfo.roleJoin(roleInfo);
     }
 
     public void quit(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerTableInfo tableInfo = roleInfo.getServerTable();
+        ServerTableInfo tableInfo = roleInfo.getTable();
         if (tableInfo != null) {
             if (!tableInfo.isReady()) {
                 tableInfo.roleQuit(roleInfo);
@@ -92,7 +96,7 @@ public class TableService {
 
     public ClientTableInfo queryInfo(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerTableInfo tableInfo = roleInfo.getServerTable();
+        ServerTableInfo tableInfo = roleInfo.getTable();
         return tableInfo.createClientTableInfo();
     }
 }

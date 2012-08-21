@@ -78,10 +78,10 @@ public class MapManager {
         mapInfos.put(players, info);
     }
 
-    public GameMap randomLoadMap(int players) {
+    public MapNode randomLoadMap(int players) {
         MapNode[] mapNodes = maps.get(players);
         int rndInt = new Random().nextInt(mapNodes.length);
-        return mapNodes[rndInt].getMap();
+        return mapNodes[rndInt];
     }
 
 

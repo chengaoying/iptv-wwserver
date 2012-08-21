@@ -6,21 +6,21 @@ import cn.ohyeah.ww.model.GameRole;
 import org.jboss.netty.channel.Channel;
 
 public class ServerRoleInfo {
-    private ServerHallInfo serverHall;
-    private ServerRoomInfo serverRoom;
-    private ServerTableInfo serverTable;
+    private ServerHallInfo hall;
+    private ServerRoomInfo room;
+    private ServerTableInfo table;
     private Channel channel;
-    private GameRole role;
+    private GameRole gameRole;
     private int[] tolen;
-    volatile private RoleGameInfo roleGame;
+    volatile private ServerRoleGameInfo roleGame;
 
     public ServerRoleInfo() {}
 
     public ClientRoleDesc createClientRoleDesc() {
         ClientRoleDesc roleDesc = new ClientRoleDesc();
-        roleDesc.setRoleId(role.getRoleId());
-        roleDesc.setRoleName(role.getRoleName());
-        if (serverTable !=null && serverTable.isReady()) {
+        roleDesc.setRoleId(gameRole.getRoleId());
+        roleDesc.setRoleName(gameRole.getRoleName());
+        if (table !=null && table.isReady()) {
             roleDesc.setStatePlaying();
         }
         else if (isReady()) {
@@ -40,7 +40,7 @@ public class ServerRoleInfo {
 
     public void prepare(int[] propIds) {
         if (!isReady()) {
-            RoleGameInfo state = new RoleGameInfo(this);
+            ServerRoleGameInfo state = new ServerRoleGameInfo(this);
             state.setPrepareProps(propIds);
             this.roleGame = state;
         }
@@ -50,11 +50,11 @@ public class ServerRoleInfo {
         return this.roleGame != null;
     }
 
-    public RoleGameInfo getRoleGame() {
+    public ServerRoleGameInfo getRoleGame() {
         return roleGame;
     }
 
-    public void setRoleGame(RoleGameInfo roleGame) {
+    public void setRoleGame(ServerRoleGameInfo roleGame) {
         this.roleGame = roleGame;
     }
 
@@ -66,36 +66,36 @@ public class ServerRoleInfo {
         this.tolen = tolen;
     }
 
-    public ServerHallInfo getServerHall() {
-        return serverHall;
+    public ServerHallInfo getHall() {
+        return hall;
     }
 
-    public void setServerHall(ServerHallInfo serverHall) {
-        this.serverHall = serverHall;
+    public void setHall(ServerHallInfo hall) {
+        this.hall = hall;
     }
 
-    public ServerRoomInfo getServerRoom() {
-        return serverRoom;
+    public ServerRoomInfo getRoom() {
+        return room;
     }
 
-    public void setServerRoom(ServerRoomInfo serverRoom) {
-        this.serverRoom = serverRoom;
+    public void setRoom(ServerRoomInfo room) {
+        this.room = room;
     }
 
-    public ServerTableInfo getServerTable() {
-        return serverTable;
+    public ServerTableInfo getTable() {
+        return table;
     }
 
-    public void setServerTable(ServerTableInfo serverTable) {
-        this.serverTable = serverTable;
+    public void setTable(ServerTableInfo table) {
+        this.table = table;
     }
 
-    public GameRole getRole() {
-        return role;
+    public GameRole getGameRole() {
+        return gameRole;
     }
 
-    public void setRole(GameRole role) {
-        this.role = role;
+    public void setGameRole(GameRole gameRole) {
+        this.gameRole = gameRole;
     }
 
     public Channel getChannel() {

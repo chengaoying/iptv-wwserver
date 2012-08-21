@@ -1,6 +1,7 @@
 package cn.ohyeah.ww.server.game;
 
-import cn.ohyeah.ww.client.model.ClientGameDetail;
+import cn.ohyeah.ww.client.message.GameRoundMessage;
+import cn.ohyeah.ww.client.message.GameStateMessage;
 
 import java.util.Random;
 
@@ -18,17 +19,43 @@ public class GameLogic {
         }
     }
 
-    public ClientGameDetail useProp(GameMap map, int propId, int srcRegionId, int destRegionId) {
+    public GameRoundMessage endRound(GameMap map, int influenceId) {
+        Influence inf = map.getInfluence(influenceId);
+        if (inf == null) {
+            //TODO throw new RuntimException();
+        }
+        Region[] regions = map.getRegions(influenceId);
+        byte[][] raiseSoldiers = new byte[regions.length][];
+        for (int i = 0; i < raiseSoldiers.length; ++i) {
+            raiseSoldiers[i] = new byte[2];
+            raiseSoldiers[i][0] = (byte)regions[i].getId();
+        }
+        int raiseCount = regions.length;
+        Random random = new Random();
+        while (raiseCount > 0) {
+            raiseSoldiers[randomInt(random, regions.length)][1]++;
+            raiseCount--;
+        }
+        byte[] freeProps = new byte[2];
+        freeProps[0] = (byte)randomInt(random, 6);
+        freeProps[1] = (byte)randomInt(random, 6);
+        GameRoundMessage roundMessage = new GameRoundMessage();
+        roundMessage.setRaiseSoldiers(raiseSoldiers);
+        roundMessage.setFreeProps(freeProps);
+        return roundMessage;
+    }
+
+    public GameStateMessage useProp(GameMap map, int propId, int srcRegionId, int destRegionId) {
         Region srcRegion = map.getRegion(srcRegionId);
         if (srcRegion == null) {
             //TODO throw new RuntimException();
         }
         Region destRegion = null;
-        ClientGameDetail detail = new ClientGameDetail();
-        detail.setCmdUseProp();
-        detail.setAttackPropId((byte) propId);
-        detail.setAttackRegionId((byte)srcRegionId);
-        detail.setDefenseRegionId((byte)destRegionId);
+        GameStateMessage stateMessage = new GameStateMessage();
+        stateMessage.setCmdUseProp();
+        stateMessage.setAttackPropId((byte) propId);
+        stateMessage.setAttackRegionId((byte) srcRegionId);
+        stateMessage.setDefenseRegionId((byte) destRegionId);
         switch (propId) {
             case 0://防御卡
                 checkDefenseCard(srcRegion);
@@ -53,7 +80,7 @@ public class GameLogic {
                 //目标地区有防御卡
                 destRegion = map.getRegion(destRegionId);
                 if (destRegion.getDefensePropId() == 0) {
-                    detail.setDefensePropId((byte)0);
+                    stateMessage.setDefensePropId((byte) 0);
                 }
                 else {
                     int attackValue = randomInt(6)+1;
@@ -63,8 +90,8 @@ public class GameLogic {
                     else {
                         destRegion.setSoldiers((short)(srcRegion.getSoldiers()-attackValue));
                     }
-                    detail.setDefenseSoldiers((byte)destRegion.getSoldiers());
-                    detail.setDefenseInflunceId((byte)destRegionId);
+                    stateMessage.setDefenseSoldiers((byte) destRegion.getSoldiers());
+                    stateMessage.setDefenseInfluenceId((byte) destRegionId);
                 }
                 break;
             case 5: //装甲卡
@@ -80,8 +107,8 @@ public class GameLogic {
                     //TODO throw new RuntimException();
                 }
                 destRegion.setSoldiers((byte)1);
-                detail.setDefenseSoldiers((byte)destRegion.getSoldiers());
-                detail.setDefenseInflunceId((byte)destRegionId);
+                stateMessage.setDefenseSoldiers((byte) destRegion.getSoldiers());
+                stateMessage.setDefenseInfluenceId((byte) destRegionId);
                 break;
             case 8: //策反卡
                 destRegion = randomEnemyRegion(map, srcRegion);
@@ -89,14 +116,14 @@ public class GameLogic {
                     //TODO throw new RuntimException();
                 }
                 destRegion.setInfluenceId(srcRegion.getInfluenceId());
-                detail.setDefenseSoldiers((byte)destRegion.getSoldiers());
-                detail.setDefenseInflunceId((byte)destRegion.getInfluenceId());
+                stateMessage.setDefenseSoldiers((byte) destRegion.getSoldiers());
+                stateMessage.setDefenseInfluenceId((byte) destRegion.getInfluenceId());
                 break;
             default:
                 //TODO throw new RuntimException();
                 break;
         }
-        return detail;
+        return stateMessage;
     }
 
     private Region randomEnemyRegion(GameMap map, Region self) {
@@ -119,7 +146,7 @@ public class GameLogic {
     }
 
 
-    public ClientGameDetail attack(GameMap map, int srcRegionId, int destRegionId) {
+    public GameStateMessage attack(GameMap map, int srcRegionId, int destRegionId) {
         Region src = map.getRegion(srcRegionId);
         if (src == null) {
             //TODO throw new RuntimException();
@@ -129,12 +156,12 @@ public class GameLogic {
             //TODO throw new RuntimException();
         }
 
-        ClientGameDetail detail = new ClientGameDetail();
-        detail.setCmdAttack();
-        detail.setAttackRegionId((byte) srcRegionId);
-        detail.setDefenseRegionId((byte)destRegionId);
-        detail.setAttackPropId((byte)src.getAttackPropId());
-        detail.setDefensePropId((byte)dest.getDefensePropId());
+        GameStateMessage stateMessage = new GameStateMessage();
+        stateMessage.setCmdAttack();
+        stateMessage.setAttackRegionId((byte) srcRegionId);
+        stateMessage.setDefenseRegionId((byte)destRegionId);
+        stateMessage.setAttackPropId((byte)src.getAttackPropId());
+        stateMessage.setDefensePropId((byte)dest.getDefensePropId());
 
         Random random = new Random();
         byte[] attackValues = new byte[src.getSoldiers()];
@@ -145,35 +172,35 @@ public class GameLogic {
         for (int i = 0; i < defenseValues.length; ++i) {
             defenseValues[i] = (byte)(random.nextInt(6)+1);
         }
-        detail.setAttackValues(attackValues);
-        detail.setDefenseValues(defenseValues);
-        if (detail.getAttackPropId() == 5) { //装备了装甲卡
-            detail.setAttackPropAttackValue((byte)6);
+        stateMessage.setAttackValues(attackValues);
+        stateMessage.setDefenseValues(defenseValues);
+        if (stateMessage.getAttackPropId() == 5) { //装备了装甲卡
+            stateMessage.setAttackPropAttackValue((byte)6);
         }
-        if (detail.getDefensePropId() == 1) { //装备了防御卡
-            detail.setDefensePropDefenseValue((byte)6);
+        if (stateMessage.getDefensePropId() == 1) { //装备了防御卡
+            stateMessage.setDefensePropDefenseValue((byte)6);
         }
 
         //进攻方胜利
-        if (detail.sumAttackValues() > detail.sumDefenseValues()) {
-            detail.setAttackSoldiers((byte)1);
-            detail.setDefenseSoldiers((byte) (src.getSoldiers() - dest.getSoldiers()));
-            detail.setDefenseInflunceId((byte)src.getInfluenceId());
+        if (stateMessage.sumAttackValues() > stateMessage.sumDefenseValues()) {
+            stateMessage.setAttackSoldiers((byte)1);
+            stateMessage.setDefenseSoldiers((byte) (src.getSoldiers() - dest.getSoldiers()));
+            stateMessage.setDefenseInfluenceId((byte) src.getInfluenceId());
         }
         else {
-            detail.setAttackSoldiers((byte)1);
-            detail.setDefenseSoldiers((byte)dest.getSoldiers());
-            detail.setDefenseInflunceId((byte)dest.getInfluenceId());
+            stateMessage.setAttackSoldiers((byte)1);
+            stateMessage.setDefenseSoldiers((byte)dest.getSoldiers());
+            stateMessage.setDefenseInfluenceId((byte) dest.getInfluenceId());
         }
 
         //服务器数据更新,删除使用过的道具
         src.setAttackPropInvalid();
         dest.setDefensePropInvalid();
         //服务器数据更新，更新进攻领地，防守领地的兵力，及防守领地的归属者
-        src.setSoldiers(detail.getAttackSoldiers());
-        dest.setSoldiers(detail.getDefenseSoldiers());
-        dest.setInfluenceId(detail.getDefenseInflunceId());
-        return detail;
+        src.setSoldiers(stateMessage.getAttackSoldiers());
+        dest.setSoldiers(stateMessage.getDefenseSoldiers());
+        dest.setInfluenceId(stateMessage.getDefenseInfluenceId());
+        return stateMessage;
     }
 
     private int randomInt(int n) {

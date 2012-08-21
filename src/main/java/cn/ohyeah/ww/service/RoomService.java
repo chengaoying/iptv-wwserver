@@ -24,13 +24,13 @@ public class RoomService {
 
     public void quickJoinTable(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerRoomInfo roomInfo = roleInfo.getServerRoom();
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
         roomInfo.roleQuickJoin(roleInfo);
     }
 
     public void quit(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerRoomInfo roomInfo = roleInfo.getServerRoom();
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
         if (roomInfo != null) {
             roomInfo.roleQuit(roleInfo);
         }
@@ -38,7 +38,7 @@ public class RoomService {
 
     public ClientRoomInfo queryInfo(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
-        ServerRoomInfo roomInfo = roleInfo.getServerRoom();
+        ServerRoomInfo roomInfo = roleInfo.getRoom();
         return roomInfo.createClientRoomInfo();
     }
 }

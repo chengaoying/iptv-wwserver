@@ -40,6 +40,26 @@ public class GameMap {
     	return regions[id];
     }
 
+    protected int getRegionCount(int influenceId) {
+        int count = 0;
+        for (int i = 0; i < regions.length; ++i) {
+            if (regions[i].getInfluenceId() == influenceId) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Region[] getRegions(int influenceId) {
+        Region[] infRegions = new Region[getRegionCount(influenceId)];
+        for (int i = 0, pos = 0; i < regions.length; ++i) {
+            if (regions[i].getInfluenceId() == influenceId) {
+                infRegions[pos++] = regions[i];
+            }
+        }
+        return infRegions;
+    }
+
     public boolean isConnected(Region region1, Region region2) {
     	if (region1 == null || region2 == null || region1 == region2) {
     		return false;

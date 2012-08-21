@@ -19,7 +19,7 @@ public class GameManager {
     }
 
     public ServerGameInfo addGameTable(ServerGameInfo gameInfo) {
-        return tables.put(gameInfo.getServerTable(), gameInfo);
+        return tables.put(gameInfo.getTable(), gameInfo);
     }
 
     public ServerGameInfo removeGameTable(ServerTableInfo tableInfo) {

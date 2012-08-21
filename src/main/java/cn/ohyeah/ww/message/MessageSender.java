@@ -1,19 +1,26 @@
 package cn.ohyeah.ww.message;
 
 import cn.ohyeah.stb.util.ByteBuffer;
+import cn.ohyeah.ww.client.message.GameEndMessage;
+import cn.ohyeah.ww.client.message.GameRoundMessage;
+import cn.ohyeah.ww.client.message.GameStartMessage;
 import cn.ohyeah.ww.client.model.ClientGameInfo;
 import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.client.model.ClientTableInfo;
+import cn.ohyeah.ww.protocol.Constant;
 import cn.ohyeah.ww.protocol.HeadWrapper;
+import cn.ohyeah.ww.server.model.ServerRoleGameInfo;
+import cn.ohyeah.ww.server.model.ServerRoleInfo;
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 
 import java.util.List;
 
 public class MessageSender {
-    public HeadWrapper createHead() {
-        HeadWrapper head = new HeadWrapper();
-        head.setType(1);
-        return head;
+    public HeadWrapper createHead(int cmd) {
+        return new HeadWrapper.Builder().version(Constant.PROTOCOL_VERSION).type(1)
+                .tag(Constant.PROTOCOL_TAG_GAME_SERVER).command(cmd).build();
     }
 
     public void encode(ByteBuffer buf) {
@@ -21,47 +28,59 @@ public class MessageSender {
         buf.setInt(buf.getReaderIndex()+4, len);
     }
 
-    public void sendRoomInfo(List<Channel> channels, ClientRoomInfo roomInfo) {
-        HeadWrapper head = createHead();
+    public void sendRoomInfo(ServerRoleInfo roleInfo, ClientRoomInfo roomInfo) {
+        HeadWrapper head = createHead(Constant.PUSH_MSG_ROOM_INFO);
         ByteBuffer buf = new ByteBuffer();
         buf.writeInt(head.getHead());
         buf.writeInt(0);
         roomInfo.serialize(buf);
         encode(buf);
-        byte[] data = buf.readAllBytes();
-        for (Channel c : channels) {
-            c.write(data);
-        }
+        ChannelBuffer chBuf = ChannelBuffers.wrappedBuffer(buf.buffer(), buf.getReaderIndex(), buf.length());
+        roleInfo.getChannel().write(chBuf);
     }
 
-    public void sendTableInfo(List<Channel> channels, ClientTableInfo tableInfo) {
-        HeadWrapper head = createHead();
+    public void sendTableInfo(ServerRoleInfo roleInfo, ClientTableInfo tableInfo) {
+        HeadWrapper head = createHead(Constant.PUSH_MSG_TABLE_INFO);
         ByteBuffer buf = new ByteBuffer();
         buf.writeInt(head.getHead());
         buf.writeInt(0);
         tableInfo.serialize(buf);
         encode(buf);
-        byte[] data = buf.readAllBytes();
-        for (Channel c : channels) {
-            c.write(data);
-        }
+        ChannelBuffer chBuf = ChannelBuffers.wrappedBuffer(buf.buffer(), buf.getReaderIndex(), buf.length());
+        roleInfo.getChannel().write(chBuf);
     }
 
-    public void sendGameInfo(List<Channel> channels, ClientGameInfo gameInfo) {
-        HeadWrapper head = createHead();
+    public void sendGameStart(ServerRoleInfo roleGameInfo, GameStartMessage startMessage) {
+        HeadWrapper head = createHead(Constant.PUSH_MSG_GAME_START);
         ByteBuffer buf = new ByteBuffer();
         buf.writeInt(head.getHead());
         buf.writeInt(0);
-        gameInfo.serialize(buf);
+        startMessage.serialize(buf);
         encode(buf);
-        byte[] data = buf.readAllBytes();
-        for (Channel c : channels) {
-            c.write(data);
-        }
+        ChannelBuffer chBuf = ChannelBuffers.wrappedBuffer(buf.buffer(), buf.getReaderIndex(), buf.length());
+        roleGameInfo.getChannel().write(chBuf);
     }
 
-    public void sendGameDetail() {
+    public void sendGameRound(ServerRoleInfo roleGameInfo, GameRoundMessage roundMessage) {
+        HeadWrapper head = createHead(Constant.PUSH_MSG_GAME_ROUND);
+        ByteBuffer buf = new ByteBuffer();
+        buf.writeInt(head.getHead());
+        buf.writeInt(0);
+        roundMessage.serialize(buf);
+        encode(buf);
+        ChannelBuffer chBuf = ChannelBuffers.wrappedBuffer(buf.buffer(), buf.getReaderIndex(), buf.length());
+        roleGameInfo.getChannel().write(chBuf);
+    }
 
+    public void sendGameEnd(ServerRoleInfo roleGameInfo, GameEndMessage endMessage) {
+        HeadWrapper head = createHead(Constant.PUSH_MSG_GAME_END);
+        ByteBuffer buf = new ByteBuffer();
+        buf.writeInt(head.getHead());
+        buf.writeInt(0);
+        endMessage.serialize(buf);
+        encode(buf);
+        ChannelBuffer chBuf = ChannelBuffers.wrappedBuffer(buf.buffer(), buf.getReaderIndex(), buf.length());
+        roleGameInfo.getChannel().write(chBuf);
     }
 
 }

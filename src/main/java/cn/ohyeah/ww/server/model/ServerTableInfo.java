@@ -11,9 +11,9 @@ public class ServerTableInfo {
     private final int tableId;
     private String tableName;
     private final int limitPlayers;
-    private ServerRoomInfo serverRoom;
+    private ServerRoomInfo room;
     private List<ServerRoleInfo> players;
-    volatile private ServerGameInfo serverGame;
+    volatile private ServerGameInfo game;
 
     public ServerTableInfo(int id, int limitPlayers) {
         this.tableId = id;
@@ -38,7 +38,7 @@ public class ServerTableInfo {
         if (players.size() < limitPlayers) {
             result = players.add(roleInfo);
             if (result) {
-                roleInfo.setServerTable(this);
+                roleInfo.setTable(this);
             }
         }
         return result;
@@ -53,23 +53,23 @@ public class ServerTableInfo {
                return false;
             }
         }
-        List<RoleGameInfo> roleGames = new ArrayList<>(limitPlayers);
+        List<ServerRoleGameInfo> serverRoleGames = new ArrayList<>(limitPlayers);
         for (ServerRoleInfo roleInfo : players) {
-            roleGames.add(new RoleGameInfo(roleInfo));
+            serverRoleGames.add(new ServerRoleGameInfo(roleInfo));
         }
-        this.serverGame = new ServerGameInfo(this, roleGames);
+        this.game = new ServerGameInfo(this, serverRoleGames);
         return true;
     }
 
     public boolean isReady() {
-        return serverGame !=null;
+        return game !=null;
     }
 
     synchronized public boolean roleQuit(ServerRoleInfo roleInfo) {
         boolean result = players.remove(roleInfo);
         if (result) {
             roleInfo.setRoleGame(null);
-            roleInfo.setServerTable(null);
+            roleInfo.setTable(null);
         }
         return result;
     }
@@ -98,12 +98,12 @@ public class ServerTableInfo {
         return ctableInfo;
     }
 
-    public ServerRoomInfo getServerRoom() {
-        return serverRoom;
+    public ServerRoomInfo getRoom() {
+        return room;
     }
 
-    public void setServerRoom(ServerRoomInfo serverRoom) {
-        this.serverRoom = serverRoom;
+    public void setRoom(ServerRoomInfo room) {
+        this.room = room;
     }
 
     public int getTableId() {
@@ -126,11 +126,11 @@ public class ServerTableInfo {
         this.players = players;
     }
 
-    public ServerGameInfo getServerGame() {
-        return serverGame;
+    public ServerGameInfo getGame() {
+        return game;
     }
 
-    public void setServerGame(ServerGameInfo serverGame) {
-        this.serverGame = serverGame;
+    public void setGame(ServerGameInfo game) {
+        this.game = game;
     }
 }

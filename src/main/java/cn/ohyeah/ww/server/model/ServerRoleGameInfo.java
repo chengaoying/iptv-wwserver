@@ -1,38 +1,62 @@
 package cn.ohyeah.ww.server.model;
 
+import cn.ohyeah.ww.client.model.ClientRoleGameInfo;
 import cn.ohyeah.ww.server.game.Influence;
-import cn.ohyeah.ww.server.model.ServerRoleInfo;
 
-public class RoleGameInfo {
+public class ServerRoleGameInfo {
+    /**
+     * ¿ÕÏÐ×´Ì¬£¬¸Õ¼ÓÈëÓÎÏ·×ÀµÄ×´Ì¬
+     */
     private static final byte STATE_IDLE = 0;
-    private static final byte STATE_PREPARE = 1;
+    /**
+     * ×¼±¸ºÃÁËµÄ×´Ì¬
+     */
+    private static final byte STATE_PREPARED = 1;
+    /**
+     * ÓÎÏ·×´Ì¬
+     */
     private static final byte STATE_PLAYING = 2;
+    /**
+     * ÓÎÏ·Ê§°Ü
+     */
+    private static final byte STATE_LOST = 3;
+    /**
+     * ÌÓÅÜ
+     */
+    private static final byte STATE_FLEEING = 4;
 
-    private ServerRoleInfo serverRole;
-    private Influence influence;
+    private ServerRoleInfo role;
+    private int influenceId;
     private int[] prepareProps;
     private int[] freeProps;
     private int state;
 
-    public RoleGameInfo(ServerRoleInfo serverRole) {
-        this.serverRole = serverRole;
+    public ServerRoleGameInfo(ServerRoleInfo role) {
+        this.role = role;
         this.state = STATE_IDLE;
     }
 
-    public ServerRoleInfo getServerRole() {
-        return serverRole;
+    public ClientRoleGameInfo createClientRoleGameInfo() {
+        ClientRoleGameInfo croleGame = new ClientRoleGameInfo();
+        croleGame.setInfluenceId((byte)influenceId);
+        croleGame.setRoleName(role.getGameRole().getRoleName());
+        return croleGame;
     }
 
-    public void setServerRole(ServerRoleInfo serverRole) {
-        this.serverRole = serverRole;
+    public ServerRoleInfo getRole() {
+        return role;
     }
 
-    public Influence getInfluence() {
-        return influence;
+    public void setRole(ServerRoleInfo role) {
+        this.role = role;
     }
 
-    public void setInfluence(Influence influence) {
-        this.influence = influence;
+    public int getInfluenceId() {
+        return influenceId;
+    }
+
+    public void setInfluenceId(int influenceId) {
+        this.influenceId = influenceId;
     }
 
     public int[] getPrepareProps() {
@@ -137,5 +161,36 @@ public class RoleGameInfo {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public void setStateIdle() {
+        this.state = STATE_IDLE;
+    }
+    public boolean isStateIdle() {
+        return this.state == STATE_IDLE;
+    }
+    public void setStatePrepared() {
+        this.state = STATE_PREPARED;
+    }
+    public boolean isStatePrepared() {
+        return this.state == STATE_PREPARED;
+    }
+    public void setStatePlaying() {
+        this.state = STATE_PLAYING;
+    }
+    public boolean isStatePlaying() {
+        return this.state == STATE_PLAYING;
+    }
+    public boolean isStateLost() {
+        return this.state == STATE_LOST;
+    }
+    public void setStateLost() {
+        this.state = STATE_LOST;
+    }
+    public boolean isStateFleeing() {
+        return this.state == STATE_FLEEING;
+    }
+    public void setStateFleeing() {
+        this.state = STATE_FLEEING;
     }
 }

@@ -15,11 +15,11 @@ public class GameRoleInfo {/*
         this.roleInfo = roleInfo;
     }
 
-    public Influence getInfluence() {
+    public Influence getInfluenceId() {
         return influence;
     }
 
-    public void setInfluence(Influence influence) {
+    public void setInfluenceId(Influence influence) {
         this.influence = influence;
     }
 

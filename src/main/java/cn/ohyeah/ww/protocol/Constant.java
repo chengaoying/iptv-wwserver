@@ -8,7 +8,9 @@ public class Constant {
 
     public static final byte PUSH_MSG_ROOM_INFO = 0;
     public static final byte PUSH_MSG_TABLE_INFO = 1;
-    public static final byte PUSH_MSG_GAME_INFO = 2;
+    public static final byte PUSH_MSG_GAME_START = 2;
+    public static final byte PUSH_MSG_GAME_ROUND = 3;
+    public static final byte PUSH_MSG_GAME_END = 4;
 
 
     /**

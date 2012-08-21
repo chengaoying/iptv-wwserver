@@ -19,57 +19,66 @@ public class ClientGameDetail implements Serializable {
     private static final byte CMD_ATTACK = 2;
 
     /**
-     * 游戏指令
+     * 游戏指令，使用道具或者进攻
      */
     private byte cmd;
     /**
-     * 进攻方进攻道具ID
+     * 进攻方的道具ID，进攻方为当前回合操作的玩家
      */
     private byte attackPropId;
     /**
-     * 防守方防守道具ID
+     * 防守方道具ID，防守方为被攻击的玩家，
+     * 当进攻方没有攻击其他领地时，此值无效
      */
     private byte defensePropId;
     /**
-     * 进攻方领地ID
+     * 进攻方领地ID，进攻方为当前回合操作的玩家
      */
     private byte attackRegionId;
     /**
-     * 防守方领地ID
+     * 防守方领地ID，防守方为被攻击的玩家，
+     * 当进攻方没有攻击其他领地时，此值无效
      */
     private byte defenseRegionId;
     /**
      * 进攻方的战斗值
+     * 当cmd为USE_PROP时，此值无效
      */
     private byte[] attackValues;
     /**
      * 防守方的战斗值
+     * 当cmd为USE_PROP时，此值无效
      */
     private byte[] defenseValues;
     /**
      * 战斗结束后进攻领地的兵力
+     * 当进攻方没有攻击其他领地时，此值无效
      */
     private byte attackSoldiers;
     /**
      * 战争结束后防守方领地的兵力
+     * 当进攻方没有攻击其他领地时，此值无效
      */
     private byte defenseSoldiers;
     /**
      * 战争结束后防守方领地的归属者
+     * 当进攻方没有攻击其他领地时，此值无效
      */
-    private byte defenseInflunceId;
+    private byte defenseInfluenceId;
     /**
      * 装备了装甲卡，产生的战斗值
+     * 当进攻方没有攻击其他领地时，此值无效
      */
     private byte attackPropAttackValue;
     /**
      * 装备了防御卡，产生的战斗值
+     * 当进攻方没有攻击其他领地时，此值无效
      */
     private byte defensePropDefenseValue;
     /**
-     * 其他玩家道具是否可见
+     * 可以看见其他玩家道具的势力ID
      */
-    private byte propsVisable;
+    private byte propsVisableInfluenceId;
 
     public ClientGameDetail() {
         this.cmd = CMD_INVALID;
@@ -181,12 +190,12 @@ public class ClientGameDetail implements Serializable {
         this.defenseSoldiers = defenseSoldiers;
     }
 
-    public byte getDefenseInflunceId() {
-        return defenseInflunceId;
+    public byte getDefenseInfluenceId() {
+        return defenseInfluenceId;
     }
 
-    public void setDefenseInflunceId(byte defenseInflunceId) {
-        this.defenseInflunceId = defenseInflunceId;
+    public void setDefenseInfluenceId(byte defenseInfluenceId) {
+        this.defenseInfluenceId = defenseInfluenceId;
     }
 
     public byte getAttackPropAttackValue() {
@@ -212,6 +221,7 @@ public class ClientGameDetail implements Serializable {
         }
         return value;
     }
+
     public int sumDefenseValues() {
         int value = defensePropDefenseValue;
         for (int i = 0; i < defenseValues.length; ++i) {
