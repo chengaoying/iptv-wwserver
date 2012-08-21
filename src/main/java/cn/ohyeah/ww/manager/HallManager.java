@@ -7,12 +7,12 @@ import cn.ohyeah.ww.server.model.ServerHallInfo;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import cn.ohyeah.ww.server.model.ServerRoomInfo;
 import cn.ohyeah.ww.server.model.ServerTableInfo;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Named;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Named
+@Service
 public class HallManager {
     private ServerHallInfo hallInfo;
     private Map<Integer, ServerRoleInfo> roles;

@@ -3,16 +3,16 @@ package cn.ohyeah.ww.server.game;
 import cn.ohyeah.stb.util.ByteBuffer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Named
+@Service
 public class MapManager {
     private static final int MAP_VERSION = 2;
     private static final String MAP_MAGIC = "MWWM";
@@ -26,11 +26,11 @@ public class MapManager {
     private ConcurrentHashMap<Integer, MapNode[]> maps;
     private ConcurrentHashMap<Integer, MapInfo> mapInfos;
 
-    @Inject
+    @Autowired
     public void setMapRootPath(String mapRootPath) {
         this.mapRootPath = mapRootPath;
     }
-    @Inject
+    @Autowired
     public void setFileExt(String fileExt) {
         this.fileExt = fileExt;
     }

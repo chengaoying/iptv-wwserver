@@ -4,14 +4,13 @@ import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.manager.HallManager;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import cn.ohyeah.ww.server.model.ServerRoomInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-@Named
+@Service
 public class RoomService {
     private HallManager hallManager;
-    @Inject
+    @Autowired
     public void setHallManager(HallManager hallManager) {
         this.hallManager = hallManager;
     }

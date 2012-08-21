@@ -11,28 +11,28 @@ import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import cn.ohyeah.ww.server.model.ServerTableInfo;
 import cn.ohyeah.ww.server.model.ServerGameInfo;
 import org.jboss.netty.channel.Channel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
-@Named
+@Service
 public class TableService {
     private HallManager hallManager;
     private GameManager gameManager;
     private MapManager mapManager;
     private MessageSender messageSender;
 
-    @Inject
+    @Autowired
     public void setHallManager(HallManager hallManager) {
         this.hallManager = hallManager;
     }
-    @Inject
+    @Autowired
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-    @Inject
+    @Autowired
     public void setMapManager(MapManager mapManager) {
         this.mapManager = mapManager;
     }

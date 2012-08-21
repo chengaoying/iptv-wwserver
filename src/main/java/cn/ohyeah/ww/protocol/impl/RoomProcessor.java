@@ -4,16 +4,16 @@ import cn.ohyeah.stb.util.ByteBuffer;
 import cn.ohyeah.ww.client.model.ClientRoomInfo;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.RoomService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Map;
 
-@Named
+@Service
 public class RoomProcessor extends AbstractProcessor {
     private RoomService roomService;
 
-    @Inject
+    @Autowired
     public void setRoomService(RoomService roomService) {
         this.roomService = roomService;
     }

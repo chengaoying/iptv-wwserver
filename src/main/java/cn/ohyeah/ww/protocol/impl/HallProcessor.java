@@ -4,17 +4,17 @@ import cn.ohyeah.stb.util.ByteBuffer;
 import cn.ohyeah.ww.client.model.ClientHallInfo;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.HallService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Map;
 
-@Named
+@Service
 public class HallProcessor extends AbstractProcessor {
 
     private HallService hallService;
 
-    @Inject
+    @Autowired
     public void setHallService(HallService hallService) {
         this.hallService = hallService;
     }

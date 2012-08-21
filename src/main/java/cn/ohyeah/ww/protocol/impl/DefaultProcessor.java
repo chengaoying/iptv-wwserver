@@ -12,15 +12,16 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-@Named
+
+@Service
 public class DefaultProcessor {
     private static Log log = LogFactory.getLog(DefaultProcessor.class);
     private String platformServer;
@@ -33,11 +34,11 @@ public class DefaultProcessor {
         processors = new HashMap<>();
     }
 
-    @Inject
+    @Autowired
     public void setPlatformServer(String platformServer) {
         this.platformServer = platformServer;
     }
-    @Inject
+    @Autowired
     public void setHttpClient(DefaultHttpClient httpClient) {
         this.httpClient = httpClient;
     }

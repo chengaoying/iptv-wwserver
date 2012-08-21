@@ -3,16 +3,16 @@ package cn.ohyeah.ww.protocol.impl;
 import cn.ohyeah.stb.util.ByteBuffer;
 import cn.ohyeah.ww.protocol.ProcessContext;
 import cn.ohyeah.ww.service.GameService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Map;
 
-@Named
+@Service
 public class GameProcessor extends AbstractProcessor {
     private GameService gameService;
 
-    @Inject
+    @Autowired
     public void setGameService(GameService gameService) {
         this.gameService = gameService;
     }

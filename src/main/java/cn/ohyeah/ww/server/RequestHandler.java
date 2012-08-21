@@ -2,19 +2,22 @@ package cn.ohyeah.ww.server;
 
 import cn.halcyon.utils.ThreadSafeClientConnManagerUtil;
 import cn.ohyeah.stb.util.ByteBuffer;
+import cn.ohyeah.ww.protocol.ProcessFrame;
+import cn.ohyeah.ww.protocol.impl.DefaultProcessor;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RequestHandler extends SimpleChannelUpstreamHandler {
-    private static final DefaultHttpClient httpClient;
-    private int count;
+    private DefaultProcessor processor;
 
-    static {
-        httpClient = ThreadSafeClientConnManagerUtil.buildDefaultHttpClient();
+    @Autowired
+    public void setDefaultProcessor(DefaultProcessor processor) {
+        this.processor = processor;
     }
 
     @Override
@@ -38,23 +41,12 @@ public class RequestHandler extends SimpleChannelUpstreamHandler {
     @Override
     public void messageReceived(
             ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-
-        ByteBuffer request = (ByteBuffer) e.getMessage();
-        byte[] data = null;
-        if (request.length() == 8) {
-            System.out.println("heart beat count: "+count++);
-            data = request.buffer();
-        }
-        else {
-            count = 0;
-            HttpPost httpPost = new HttpPost("http://localhost:8080/itvgame/protocolv2/processor");
-            httpPost.setHeader("Content-Type", "application/octet-stream");
-            httpPost.setEntity(new ByteArrayEntity(request.readAllBytes()));
-            data = ThreadSafeClientConnManagerUtil.executeForBodyByteArray(httpClient, httpPost);
-        }
-        ChannelBuffer buf = ChannelBuffers.copiedBuffer(data);
+        ProcessFrame frame = new ProcessFrame();
+        frame.setChannel(e.getChannel());
+        frame.setRequest((ByteBuffer)e.getMessage());
+        ByteBuffer resp = processor.process(frame);
+        ChannelBuffer buf = ChannelBuffers.wrappedBuffer(resp.buffer(), resp.getReaderIndex(), resp.length());
         ChannelFuture future = e.getChannel().write(buf);
-
         // Close the connection after sending 'Have a good day!'
         // if the client has sent 'bye'.
         //if (close) {

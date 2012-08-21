@@ -8,26 +8,26 @@ import cn.ohyeah.ww.model.GameRole;
 import cn.ohyeah.ww.protocol.Constant;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.jboss.netty.channel.Channel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Map;
 
-@Named
+@Service
 public class HallService {
     private ChannelManager channelManager;
     private HallManager hallManager;
     private IGameRoleDao roleDao;
 
-    @Inject
+    @Autowired
     public void setHallManager(HallManager hallManager) {
         this.hallManager = hallManager;
     }
-    @Inject
+    @Autowired
     public void setChannelManager(ChannelManager channelManager) {
         this.channelManager = channelManager;
     }
-    @Inject
+    @Autowired
     public void setGameRoleDao(IGameRoleDao roleDao) {
         this.roleDao = roleDao;
     }

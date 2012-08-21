@@ -1,8 +1,9 @@
-package cn.ohyeah.ww.service;
+package cn.ohyeah.ww.manager;
+
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoleService {
+public class Configurations {
 
 }

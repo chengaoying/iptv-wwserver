@@ -10,33 +10,33 @@ import cn.ohyeah.ww.server.game.GameLogic;
 import cn.ohyeah.ww.server.model.ServerRoleGameInfo;
 import cn.ohyeah.ww.server.model.ServerGameInfo;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-@Named
+@Service
 public class GameService {
     private HallManager hallManager;
     private GameManager gameManager;
     private GameLogic gameLogic;
     private MessageSender messageSender;
 
-    @Inject
+    @Autowired
     public void setMessageSender(MessageSender messageSender) {
         this.messageSender = messageSender;
     }
 
-    @Inject
+    @Autowired
     public void setGameLogic(GameLogic gameLogic) {
         this.gameLogic = gameLogic;
     }
 
-    @Inject
+    @Autowired
     public void setHallManager(HallManager hallManager) {
         this.hallManager = hallManager;
     }
 
-    @Inject
+    @Autowired
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
@@ -96,7 +96,7 @@ public class GameService {
             //TODO throw new RuntimeException();
         }
 
-        GameRoundMessage roundMessage = gameLogic.endRound(gameInfo.getMap(), roleGameInfo.getInfluenceId().getId());
+        GameRoundMessage roundMessage = gameLogic.endRound(gameInfo.getMap(), roleGameInfo.getInfluenceId());
         roundMessage.setLastRoleIndex((short) gameInfo.getCurRoleIndex());
         roundMessage.setCurRoleIndex((byte)gameInfo.nextRoleIndex());
         //TODO
