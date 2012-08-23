@@ -1,4 +1,4 @@
-package cn.halcyon.game.asyndao.impl;
+package cn.halcyon.asyndao;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

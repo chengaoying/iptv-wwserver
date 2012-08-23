@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.ohyeah.ww.dao.impl.mybatis.GameRoleMapper">
+	<select id="read" resultType="GameRole" parameterType="Integer">
+		select * from `GameRole` where roleId=#{0};
+	</select>
+	
+	<select id="readByRoleName" resultType="GameRole" parameterType="String">
+		select * from `GameRole` where roleName=#{0};
+	</select>
+	
+	<select id="readByUserId" resultType="GameRole" parameterType="String">
+		select * from `GameRole` where userId=#{0};
+	</select>
+	
+	<select id="readAll" resultType="GameRole">
+		select * from `GameRole`;
+	</select>
+
+	<insert id="create" parameterType="GameRole">
+		insert into `GameRole`(
+            roleId,
+			roleName,
+			nickName,
+			password,
+            privilege,
+            accountId,
+			userId,
+            gender,
+            headIcon,
+            goldCoin,
+            gameCoin,
+			scores,
+            state,
+            onlineSeconds,
+            victoryCount,
+            failureCount,
+            escapeCount,
+            playCount,
+			createTime,
+            updateTime,
+            loginTime,
+            logoutTime,
+            loginIp
+			)
+		values(
+            #{roleId},
+			#{roleName},
+			#{nickName},
+			#{password},
+			#{privilege},
+            #{accountId},
+			#{userId},
+            #{gender},
+            #{headIcon},
+			#{goldCoin},
+			#{gameCoin},
+            #{scores},
+            #{state},
+            #{onlineSeconds},
+            #{victoryCount},
+            #{failureCount},
+            #{escapeCount},
+            #{playCount},
+			#{createTime},
+			#{updateTime},
+            #{loginTime},
+            #{logoutTime},
+            #{loginIp}
+		);
+		<selectKey resultType="int" order="AFTER" keyProperty="roleId">
+		    select LAST_INSERT_ID();  
+		</selectKey> 
+	</insert>
+	
+	<update id="update" parameterType="GameRole">
+		update `GameRole` set
+			nickName=#{nickName},
+            goldCoin=#{goldCoin},
+            gameCoin=#{gameCoin},
+			scores=#{scores},
+            state=#{state},
+            onlineSeconds=#{onlineSeconds},
+            victoryCount=#{victoryCount},
+            failureCount=#{failureCount},
+            escapeCount=#{escapeCount},
+            playCount=#{playCount},
+            loginTime=#{loginTime},
+            logoutTime=#{logoutTime},
+            loginIp=#{loginIp};
+	</update>
+</mapper>

@@ -1,4 +1,4 @@
-package cn.ohyeah.ww.manager;
+package cn.ohyeah.ww.global;
 
 
 import cn.ohyeah.ww.utils.ThreadSafeClientConnManagerUtil;

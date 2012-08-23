@@ -2,9 +2,6 @@ package cn.halcyon.db.conn;
 
 public class DBException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4954424601259206372L;
 
 	public DBException() {
@@ -22,7 +19,4 @@ public class DBException extends RuntimeException {
 	public DBException(Throwable cause) {
 		super(cause);
 	}
-
-
-
 }

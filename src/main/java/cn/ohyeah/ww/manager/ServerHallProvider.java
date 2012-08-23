@@ -1,6 +1,6 @@
 package cn.ohyeah.ww.manager;
 
-import cn.ohyeah.ww.server.model.ServerHallInfo;
+import cn.ohyeah.ww.global.Configurations;
 import org.springframework.stereotype.Service;
 
 @Service
