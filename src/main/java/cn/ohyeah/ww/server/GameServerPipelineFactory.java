@@ -2,14 +2,13 @@ package cn.ohyeah.ww.server;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.channel.Channels;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.jboss.netty.channel.Channels.*;
-
 @Service
 public class GameServerPipelineFactory implements ChannelPipelineFactory {
-
+    //private ExecutionHandler executionHandler;
     private RequestHandler requestHandler;
 
     @Autowired
@@ -19,14 +18,11 @@ public class GameServerPipelineFactory implements ChannelPipelineFactory {
 
     @Override
     public ChannelPipeline getPipeline() throws Exception {
-        ChannelPipeline pipeline = pipeline();
-
-        // Add the text line codec combination first,
-        pipeline.addLast("framer", new RequestDecoder(16*1024, 4, 4));
-
-        // and then business logic.
-        pipeline.addLast("handler", requestHandler);
-
+        ChannelPipeline pipeline = Channels.pipeline(
+                new RequestDecoder(16*1024, 4, 4),
+                //executionHandler,
+                requestHandler
+        );
         return pipeline;
     }
 }

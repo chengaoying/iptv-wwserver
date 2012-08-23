@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.halcyon.game.dao.impl.mybatis.AccountMapper">
+	<select id="read" resultType="Account" parameterType="Integer">
+		select * from `Account` where accountId=#{id};
+	</select>
+	
+	<select id="readByUserName" resultType="Account" parameterType="String">
+		select * from `Account` where userName=#{userName};
+	</select>
+	
+	<select id="readByUserId" resultType="Account" parameterType="String">
+		select * from `Account` where userId=#{userId};
+	</select>
+	
+	<select id="readAll" resultType="Account">
+		select * from `Account`;
+	</select>
+	
+	<insert id="create" parameterType="Account">
+		insert into `Account`(
+			userName,
+			nickName,
+			password,
+			privilege,
+			userId,
+			scores,
+			goldCoin,
+			gameCoin,
+			createTime,
+			updateTime,
+			state
+			) 
+		values(
+			#{userName},
+			#{nickName},
+			#{password},
+			#{privilege},
+			#{userId},
+			#{scores},
+			#{goldCoin},
+			#{gameCoin},
+			#{createTime},
+			#{updateTime},
+			#{state}
+		);
+		<selectKey resultType="int" order="AFTER" keyProperty="accountId">  
+		    select LAST_INSERT_ID();  
+		</selectKey> 
+	</insert>
+	
+	<update id="update" parameterType="Account">
+		update `Account` set
+			userName=#{userName},
+			nickName=#{nickName},
+			password=#{password},
+			privilege=#{privilege},
+			userId=#{userId},
+			scores=#{scores},
+			goldCoin=#{goldCoin},
+			gameCoin=#{gameCoin},
+			createTime=#{creatTime},
+			updateTime=#{updateTime},
+			state=#{state};
+	</update>
+	
+	<delete id="delete" parameterType="Account">
+		delete from `Account` where accountId=#{accountId};
+	</delete>
+</mapper>

@@ -19,7 +19,7 @@ public class Configurations {
 
     @Bean(name={"platformServer"})
     public String getPlatformServer() {
-        return "";
+        return "http://localhost:8080/itvgame/protocolv2/processor";
     }
 
     @Bean(name={"defaultHttpClient"})
