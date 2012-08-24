@@ -12,7 +12,7 @@ public class ServerRoleInfo {
     private Channel channel;
     private GameRole gameRole;
     private int[] tolen;
-    volatile private ServerRoleGameInfo roleGame;
+    volatile private ServerPlayerInfo player;
 
     public ServerRoleInfo() {}
 
@@ -40,22 +40,22 @@ public class ServerRoleInfo {
 
     public void prepare(int[] propIds) {
         if (!isReady()) {
-            ServerRoleGameInfo state = new ServerRoleGameInfo(this);
+            ServerPlayerInfo state = new ServerPlayerInfo(this);
             state.setPrepareProps(propIds);
-            this.roleGame = state;
+            this.player = state;
         }
     }
 
     public boolean isReady() {
-        return this.roleGame != null;
+        return this.player != null;
     }
 
-    public ServerRoleGameInfo getRoleGame() {
-        return roleGame;
+    public ServerPlayerInfo getPlayer() {
+        return player;
     }
 
-    public void setRoleGame(ServerRoleGameInfo roleGame) {
-        this.roleGame = roleGame;
+    public void setPlayer(ServerPlayerInfo player) {
+        this.player = player;
     }
 
     public int[] getTolen() {

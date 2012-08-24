@@ -1,4 +1,4 @@
-package cn.halcyon.asyndao;
+package cn.halcyon.asyn;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -9,19 +9,17 @@ import java.util.concurrent.ExecutorService;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import cn.halcyon.asyn.ICallback;
-import cn.halcyon.asyn.IExceptionHandler;
 
-public class AsynDaoProxy implements MethodInterceptor {
-	private Object dao;
+public class AsynTaskProxy implements MethodInterceptor {
+	private Object obj;
 	private ExecutorService executor;
 	private Map<String, Method> methods;
 	
-	public AsynDaoProxy(ExecutorService executor, Object dao) {
+	public AsynTaskProxy(ExecutorService executor, Object obj) {
 		this.executor = executor;
-		this.dao = dao;
+		this.obj = obj;
 		methods = new HashMap<String, Method>();
-		Method[] ms = dao.getClass().getMethods();
+		Method[] ms = obj.getClass().getMethods();
 		for (Method m : ms) {
 			methods.put(m.getName(), m);
 		}
@@ -37,7 +35,7 @@ public class AsynDaoProxy implements MethodInterceptor {
 			Callable caller = new Callable() {
 				@Override
 				public Object call() throws Exception {
-					return m.invoke(dao, args);
+					return m.invoke(obj, args);
 				}
 			};
 			result = executor.submit(caller);
@@ -47,7 +45,7 @@ public class AsynDaoProxy implements MethodInterceptor {
 				@Override
 				public void run() {
 					try {
-						Object v = m.invoke(dao, Arrays.copyOf(args, args.length-2));
+						Object v = m.invoke(obj, Arrays.copyOf(args, args.length-2));
 						ICallback callback = (ICallback)args[args.length-2];
 						if (callback != null) {
 							callback.call(v);

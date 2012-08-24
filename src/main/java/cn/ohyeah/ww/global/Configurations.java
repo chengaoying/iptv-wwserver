@@ -3,6 +3,7 @@ package cn.ohyeah.ww.global;
 
 import cn.ohyeah.ww.utils.ThreadSafeClientConnManagerUtil;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;

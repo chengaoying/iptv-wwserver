@@ -6,11 +6,11 @@
 		select * from `GameRole` where roleId=#{0};
 	</select>
 	
-	<select id="readByRoleName" resultType="GameRole" parameterType="String">
+	<select id="readByName" resultType="GameRole" parameterType="String">
 		select * from `GameRole` where roleName=#{0};
 	</select>
 	
-	<select id="readByUserId" resultType="GameRole" parameterType="String">
+	<select id="readRoles" resultType="GameRole" parameterType="String">
 		select * from `GameRole` where userId=#{0};
 	</select>
 	
@@ -20,12 +20,10 @@
 
 	<insert id="create" parameterType="GameRole">
 		insert into `GameRole`(
-            roleId,
 			roleName,
 			nickName,
 			password,
             privilege,
-            accountId,
 			userId,
             gender,
             headIcon,
@@ -45,12 +43,10 @@
             loginIp
 			)
 		values(
-            #{roleId},
 			#{roleName},
 			#{nickName},
 			#{password},
 			#{privilege},
-            #{accountId},
 			#{userId},
             #{gender},
             #{headIcon},
@@ -88,6 +84,7 @@
             playCount=#{playCount},
             loginTime=#{loginTime},
             logoutTime=#{logoutTime},
-            loginIp=#{loginIp};
+            loginIp=#{loginIp}
+        where roleId=#{roleId};
 	</update>
 </mapper>

@@ -1,4 +1,4 @@
-package cn.halcyon.db.asyn;
+package cn.halcyon.asyndao;
 
 import cn.halcyon.asyn.TaskExecutor;
 

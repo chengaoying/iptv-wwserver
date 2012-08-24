@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="${sqlDialect}.properties"/>
+
+    <typeAliases>
+       <typeAlias type="cn.ohyeah.ww.model.GameRole" alias="GameRole"/>
+    </typeAliases>
+    
+    <environments default="product">
+        <environment id="product">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.password}"/>
+                <property name="maxPoolSize" value="#{jdbc.maxPoolSize}"/>
+                <property name="minPoolSize" value="#{jdbc.minPoolSize}"/>
+                <property name="initialPoolSize" value="#{jdbc.initialPoolSize}"/>
+                <property name="acquireIncremen" value="#{jdbc.acquireIncremen}"/>
+                <property name="maxStatements" value="#{jdbc.maxStatements}"/>
+                <property name="maxIdleTime" value="#{jdbc.maxIdleTime}"/>
+                <property name="checkoutTimeout" value="#{jdbc.checkoutTimeout}"/>
+            </dataSource>
+        </environment>
+        <environment id="test">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/test?characterEncoding=GBK"/>
+                <property name="username" value="root"/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+      
+    <mappers>
+    	<mapper resource="cn/ohyeah/ww/dao/impl/mybatis/${sqlDialect}/GameRoleMapper.xml"/>
+    </mappers>
+      
+</configuration>

@@ -2,6 +2,8 @@ package cn.ohyeah.ww.model;
 
 public class RoleProps {
     private int roleId;
+    private String roleName;
+    private String userId;
     private int prop1;
     private int prop2;
     private int prop3;
@@ -18,6 +20,22 @@ public class RoleProps {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public int getProp1() {

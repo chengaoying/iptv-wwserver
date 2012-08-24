@@ -6,6 +6,6 @@ import cn.ohyeah.ww.model.GameRole;
 import java.util.List;
 
 public interface GameRoleMapper extends IGeneralDao<GameRole, Integer> {
-	public GameRole readByRoleName(String userName);
-	public List<GameRole> readByUserId(String userId);
+	public GameRole readByName(String userName);
+	public List<GameRole> readRoles(String userId);
 }

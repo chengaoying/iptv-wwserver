@@ -9,6 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.ChannelFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -83,7 +86,7 @@ public class DefaultProcessor {
         }
     }
 
-    public ByteBuffer process(ProcessFrame frame) {
+    public void process(final ProcessFrame frame) {
         ByteBuffer req = frame.getRequest();
         ByteBuffer rsp = null;
         HeadWrapper head = new HeadWrapper(req.getInt(req.getReaderIndex()));
@@ -127,6 +130,7 @@ public class DefaultProcessor {
                 throw new ProtocolProcessException(msg, e);
             }
         }
-        return rsp;
+        ChannelBuffer buf = ChannelBuffers.wrappedBuffer(rsp.buffer(), rsp.getReaderIndex(), rsp.length());
+        frame.getChannel().write(buf);
     }
 }

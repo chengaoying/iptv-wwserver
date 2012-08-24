@@ -64,7 +64,8 @@ public class Constant {
         HALL,
         ROOM,
         TABLE,
-        GAME
+        GAME,
+        Role
     };
 
     public static enum CmdHallUserdata {
@@ -95,6 +96,11 @@ public class Constant {
         END_ROUND,
         //QUERY_INFO
     };
+
+    public static enum CmdRole {
+        QUERY_ROLES,
+        CREATE,
+    }
 
     public static final String[][] PROTOCOL_CMDS_USERDATAS = {
         createNames(ProtocolCmd.values()),

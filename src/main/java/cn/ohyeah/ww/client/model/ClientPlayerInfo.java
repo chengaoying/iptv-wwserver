@@ -1,7 +1,7 @@
 package cn.ohyeah.ww.client.model;
 
 
-public class ClientRoleGameInfo {
+public class ClientPlayerInfo {
     private String roleName;
     private short influenceId;
 

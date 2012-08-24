@@ -22,6 +22,7 @@ public class GameServer implements ApplicationContextAware{
     public GameServer(int port) {
         this.port = port;
     }
+
     public void run() {
         ServerBootstrap bootstrap = new ServerBootstrap(
                 new NioServerSocketChannelFactory(

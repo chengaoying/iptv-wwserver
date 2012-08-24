@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.ohyeah.ww.dao.impl.mybatis.RolePropsMapper">
+	<select id="read" resultType="RoleProps" parameterType="Integer">
+		select * from `RoleProps` where roleId=#{0};
+	</select>
+	
+	<select id="readAll" resultType="RoleProps">
+		select * from `RoleProps`;
+	</select>
+
+	<insert id="create" parameterType="RoleProps">
+		insert into `RoleProps`(
+            roleId
+            roleName
+            userId
+            prop1
+            prop2
+            prop3
+            prop4
+            prop5
+            prop6
+            prop7
+            prop8
+            prop9
+		)
+		values(
+            #{roleId}
+            #{roleName}
+            #{userId}
+            #{prop1}
+            #{prop2}
+            #{prop3}
+            #{prop4}
+            #{prop5}
+            #{prop6}
+            #{prop7}
+            #{prop8}
+            #{prop9}
+		);
+	</insert>
+	
+	<update id="update" parameterType="RoleProps">
+		update `RoleProps` set
+            prop1=#{prop1},
+            prop2=#{prop2},
+            prop3=#{prop3},
+            prop4=#{prop4},
+            prop5=#{prop5},
+            prop6=#{prop6},
+            prop7=#{prop7},
+            prop8=#{prop8},
+            prop9=#{prop9}
+        where roleId=#{roleId};
+	</update>
+</mapper>

@@ -2,8 +2,8 @@ package cn.ohyeah.ww.server.model;
 
 import cn.ohyeah.ww.client.message.GameStartMessage;
 import cn.ohyeah.ww.client.model.ClientGameInfo;
+import cn.ohyeah.ww.client.model.ClientPlayerInfo;
 import cn.ohyeah.ww.client.model.ClientRoleDesc;
-import cn.ohyeah.ww.client.model.ClientRoleGameInfo;
 import cn.ohyeah.ww.server.game.GameMap;
 import cn.ohyeah.ww.server.game.Influence;
 
@@ -13,22 +13,22 @@ import java.util.Random;
 
 public class ServerGameInfo {
     private ServerTableInfo table;
-    private List<ServerRoleGameInfo> roleGames;
+    private List<ServerPlayerInfo> players;
     volatile private int curRoleIndex;
     volatile private long startMillis;
     private GameMap map;
 
-    public ServerGameInfo(ServerTableInfo table, List<ServerRoleGameInfo> roleGames) {
+    public ServerGameInfo(ServerTableInfo table, List<ServerPlayerInfo> players) {
         this.table = table;
-        this.roleGames = roleGames;
+        this.players = players;
         this.curRoleIndex = 0;
     }
 
     public ClientGameInfo createClientGameInfo() {
         ClientGameInfo cgInfo = new ClientGameInfo();
-        List<ClientRoleDesc> roleDescList = new ArrayList<>(roleGames.size());
-        for (ServerRoleGameInfo serverRoleGame : roleGames) {
-            roleDescList.add(serverRoleGame.getRole().createClientRoleDesc());
+        List<ClientRoleDesc> roleDescList = new ArrayList<>(players.size());
+        for (ServerPlayerInfo serverPlayer : players) {
+            roleDescList.add(serverPlayer.getRole().createClientRoleDesc());
         }
         cgInfo.setCurRole(curRoleIndex);
         cgInfo.setRoles(roleDescList);
@@ -38,16 +38,16 @@ public class ServerGameInfo {
     public GameStartMessage createGameStartMessage() {
         GameStartMessage startMessage = new GameStartMessage();
         startMessage.setCurRoleIndex((byte)curRoleIndex);
-        List<ClientRoleGameInfo> croleGames = new ArrayList<>(roleGames.size());
-        for (int i = 0; i < roleGames.size(); ++i) {
-            croleGames.add(roleGames.get(i).createClientRoleGameInfo());
+        List<ClientPlayerInfo> croleGames = new ArrayList<>(players.size());
+        for (int i = 0; i < players.size(); ++i) {
+            croleGames.add(players.get(i).createClientRoleGameInfo());
         }
         startMessage.setRoles(croleGames);
         return startMessage;
     }
 
-    public ServerRoleGameInfo getCurGameRole() {
-        return roleGames.get(curRoleIndex);
+    public ServerPlayerInfo getCurGameRole() {
+        return players.get(curRoleIndex);
     }
 
     public int getCurRoleIndex() {
@@ -57,13 +57,13 @@ public class ServerGameInfo {
     synchronized public int nextRoleIndex() {
         int newIndex = curRoleIndex;
         int oldIndex = newIndex;
-        int size = roleGames.size();
+        int size = players.size();
         do {
             newIndex =  (1+newIndex)%size;
             if (newIndex == oldIndex) {
                 break;
             }
-        } while (!roleGames.get(newIndex).isStatePlaying());
+        } while (!players.get(newIndex).isStatePlaying());
         curRoleIndex = newIndex;
         return newIndex;
     }
@@ -93,7 +93,7 @@ public class ServerGameInfo {
     }
 
     public int getPlayerCount() {
-        return roleGames.size();
+        return players.size();
     }
 
     public void assignInfluence() {
@@ -102,11 +102,11 @@ public class ServerGameInfo {
         int roleStartPos = rand.nextInt(infs.length);
         int infStartPos = rand.nextInt(infs.length);
         for (int i = roleStartPos; i < infs.length; ++i) {
-            roleGames.get(i).setInfluenceId(infs[infStartPos].getId());
+            players.get(i).setInfluenceId(infs[infStartPos].getId());
             infStartPos = (infStartPos+1)%infs.length;
         }
         for (int i = 0; i < roleStartPos; ++i) {
-            roleGames.get(i).setInfluenceId(infs[infStartPos].getId());
+            players.get(i).setInfluenceId(infs[infStartPos].getId());
             infStartPos = (infStartPos+1)%infs.length;
         }
         curRoleIndex = roleStartPos;

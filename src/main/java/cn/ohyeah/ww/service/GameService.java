@@ -7,11 +7,10 @@ import cn.ohyeah.ww.manager.GameManager;
 import cn.ohyeah.ww.manager.HallManager;
 import cn.ohyeah.ww.message.MessageSender;
 import cn.ohyeah.ww.server.game.GameLogic;
-import cn.ohyeah.ww.server.model.ServerRoleGameInfo;
+import cn.ohyeah.ww.server.model.ServerPlayerInfo;
 import cn.ohyeah.ww.server.model.ServerGameInfo;
 import cn.ohyeah.ww.server.model.ServerRoleInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,19 +53,19 @@ public class GameService {
         if (gameInfo != null) {
 
         }
-        ServerRoleGameInfo roleGameInfo = gameInfo.getCurGameRole();
-        roleGameInfo.setStateFleeing();
+        ServerPlayerInfo playerInfo = gameInfo.getCurGameRole();
+        playerInfo.setStateFleeing();
         //TODO 扣分，如果为两人游戏，其他玩家直接胜利
     }
 
     public GameStateMessage useProp(int roleId, int[] token, int propId, int attackRegionId, int defenseRegionId) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
         ServerGameInfo gameInfo = roleInfo.getTable().getGame();
-        ServerRoleGameInfo roleGameInfo = gameInfo.getCurGameRole();
-        if (roleGameInfo.getRole() != roleInfo) {
+        ServerPlayerInfo playerInfo = gameInfo.getCurGameRole();
+        if (playerInfo.getRole() != roleInfo) {
             //TODO throw new RuntimeException();
         }
-        if (!roleGameInfo.useProp(propId)) {
+        if (!playerInfo.useProp(propId)) {
             //TODO throw new RuntimeException();
         }
 
@@ -78,8 +77,8 @@ public class GameService {
     public GameStateMessage attack(int roleId, int[] token, int attackRegionId, int defenseRegionId) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
         ServerGameInfo gameInfo = roleInfo.getTable().getGame();
-        ServerRoleGameInfo roleGameInfo = gameInfo.getCurGameRole();
-        if (roleGameInfo.getRole() != roleInfo) {
+        ServerPlayerInfo playerInfo = gameInfo.getCurGameRole();
+        if (playerInfo.getRole() != roleInfo) {
             //TODO throw new RuntimeException();
         }
 
@@ -91,12 +90,12 @@ public class GameService {
     public GameRoundMessage endRound(int roleId, int[] token) {
         ServerRoleInfo roleInfo = hallManager.queryAndCheckRole(roleId, token);
         ServerGameInfo gameInfo = roleInfo.getTable().getGame();
-        ServerRoleGameInfo roleGameInfo = gameInfo.getCurGameRole();
-        if (roleGameInfo.getRole() != roleInfo) {
+        ServerPlayerInfo playerInfo = gameInfo.getCurGameRole();
+        if (playerInfo.getRole() != roleInfo) {
             //TODO throw new RuntimeException();
         }
 
-        GameRoundMessage roundMessage = gameLogic.endRound(gameInfo.getMap(), roleGameInfo.getInfluenceId());
+        GameRoundMessage roundMessage = gameLogic.endRound(gameInfo.getMap(), playerInfo.getInfluenceId());
         roundMessage.setLastRoleIndex((short) gameInfo.getCurRoleIndex());
         roundMessage.setCurRoleIndex((byte)gameInfo.nextRoleIndex());
         //TODO

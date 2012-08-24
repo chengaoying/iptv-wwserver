@@ -8,33 +8,14 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public interface IAsynGameRoleDao {
-    public abstract void create(final GameRole role,
-                                final ICallback<Void> callback,
-                                final IExceptionHandler exceptionHandler);
-
-    public abstract Future<Void> create(final GameRole role);
-
-    public abstract void update(final GameRole role,
-                                final ICallback<Integer> callback,
-                                final IExceptionHandler exceptionHandler);
-
-    public abstract Future<Integer> update(final GameRole role);
-
-    public abstract void readByRoleId(final int roleId,
-                                         final ICallback<GameRole> callback,
-                                         final IExceptionHandler exceptionHandler);
-
-    public abstract Future<GameRole> readByRoleId(final int roleId);
-
-    public abstract void readByRoleName(final String roleName,
-                                        final ICallback<GameRole> callback,
-                                        final IExceptionHandler exceptionHandler);
-
-    public abstract Future<GameRole> readByRoleName(final String roleName);
-
-    public abstract void readByUserId(final String userId,
-                                      final ICallback<List<GameRole>> callback,
-                                      final IExceptionHandler exceptionHandler);
-
-    public abstract Future<List<GameRole>> readByUserId(final String userId);
+    public void create(GameRole role, ICallback<Void> callback, IExceptionHandler exceptionHandler);
+    public Future<Void> create(GameRole role);
+    public void update(GameRole role, ICallback<Integer> callback, IExceptionHandler exceptionHandler);
+    public Future<Integer> update(GameRole role);
+    public void readByRoleId(int roleId, ICallback<GameRole> callback, IExceptionHandler exceptionHandler);
+    public Future<GameRole> readByRoleId(int roleId);
+    public void readByRoleName(String roleName, ICallback<GameRole> callback, IExceptionHandler exceptionHandler);
+    public Future<GameRole> readByRoleName(String roleName);
+    public void readByUserId(String userId, ICallback<List<GameRole>> callback, IExceptionHandler exceptionHandler);
+    public Future<List<GameRole>> readByUserId(String userId);
 }

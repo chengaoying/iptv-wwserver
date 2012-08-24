@@ -10,6 +10,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import cn.halcyon.db.conn.DBException;
 
+import javax.annotation.Resource;
+
 
 public abstract class AbstractMybatisGeneralDao<ModelType, PKType, MapperType extends IGeneralDao<ModelType, PKType>> 
 	implements	IGeneralDao<ModelType, PKType> {
@@ -17,15 +19,16 @@ public abstract class AbstractMybatisGeneralDao<ModelType, PKType, MapperType ex
 	private static Log log = LogFactory.getLog(AbstractMybatisGeneralDao.class); 
 	private SqlSessionFactory sf;
 	private Class<MapperType> mapperClass;
-	
-	public AbstractMybatisGeneralDao(SqlSessionFactory sf, Class<MapperType> mapperClass) {        
-		this.sf = sf;
-		this.mapperClass = mapperClass;
-		if(sf==null || mapperClass==null) {
-			log.error("Error: Could not instantiate AbstractMybatisGeneralDAO. Loading myBatis sessionFactory or mapperClass failed.");      
-		}
-	}
-	
+
+    public AbstractMybatisGeneralDao(Class<MapperType> mapperClass) {
+        this.mapperClass = mapperClass;
+    }
+
+    @Resource
+    public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+        this.sf = sqlSessionFactory;
+    }
+
 	protected SqlSession openSession() {
 		return sf.openSession();
 	}
@@ -35,7 +38,7 @@ public abstract class AbstractMybatisGeneralDao<ModelType, PKType, MapperType ex
 	}
 	
 	@Override
-	public ModelType read(PKType id) throws DBException{
+	public ModelType read(PKType id) {
 		SqlSession session = null;
 		try {
 			session = sf.openSession();

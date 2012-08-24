@@ -7,7 +7,7 @@ import java.util.List;
 public interface IGameRoleDao {
     public void create(GameRole role);
     public int update(GameRole role);
-    public GameRole readByRoleId(int roleId);
-    public GameRole readByRoleName(String roleName);
-    public List<GameRole> readByUserId(String userId);
+    public GameRole read(int roleId);
+    public GameRole readByName(String roleName);
+    public List<GameRole> readRoles(String userId);
 }

@@ -5,31 +5,30 @@ import cn.halcyon.db.conn.DBException;
 import cn.ohyeah.ww.dao.IGameRoleDao;
 import cn.ohyeah.ww.model.GameRole;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class GameRoleDao extends AbstractMybatisGeneralDao<GameRole, Integer, GameRoleMapper>
-    implements IGameRoleDao{
+    implements IGameRoleDao {
 
-    public GameRoleDao(SqlSessionFactory sf, Class<GameRoleMapper> mapperClass) {
-        super(sf, mapperClass);
+    public GameRoleDao() {
+        super(GameRoleMapper.class);
     }
 
     @Override
-    public GameRole readByRoleId(int roleId) {
+    public GameRole read(int roleId) {
         return super.read(roleId);
     }
 
     @Override
-    public GameRole readByRoleName(String roleName) {
+    public GameRole readByName(String roleName) {
         SqlSession session = null;
         try {
             session = openSession();
             GameRoleMapper mapper = session.getMapper(GameRoleMapper.class);
-            return mapper.readByRoleName(roleName);
+            return mapper.readByName(roleName);
         }
         catch (Exception e) {
             throw new DBException(e);
@@ -40,12 +39,12 @@ public class GameRoleDao extends AbstractMybatisGeneralDao<GameRole, Integer, Ga
     }
 
     @Override
-    public List<GameRole> readByUserId(String userId) {
+    public List<GameRole> readRoles(String userId) {
         SqlSession session = null;
         try {
             session = openSession();
             GameRoleMapper mapper = session.getMapper(GameRoleMapper.class);
-            return mapper.readByUserId(userId);
+            return mapper.readRoles(userId);
         }
         catch (Exception e) {
             throw new DBException(e);

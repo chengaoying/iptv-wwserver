@@ -53,11 +53,11 @@ public class ServerTableInfo {
                return false;
             }
         }
-        List<ServerRoleGameInfo> serverRoleGames = new ArrayList<>(limitPlayers);
+        List<ServerPlayerInfo> serverPlayers = new ArrayList<>(limitPlayers);
         for (ServerRoleInfo roleInfo : players) {
-            serverRoleGames.add(new ServerRoleGameInfo(roleInfo));
+            serverPlayers.add(new ServerPlayerInfo(roleInfo));
         }
-        this.game = new ServerGameInfo(this, serverRoleGames);
+        this.game = new ServerGameInfo(this, serverPlayers);
         return true;
     }
 
@@ -68,7 +68,7 @@ public class ServerTableInfo {
     synchronized public boolean roleQuit(ServerRoleInfo roleInfo) {
         boolean result = players.remove(roleInfo);
         if (result) {
-            roleInfo.setRoleGame(null);
+            roleInfo.setPlayer(null);
             roleInfo.setTable(null);
         }
         return result;

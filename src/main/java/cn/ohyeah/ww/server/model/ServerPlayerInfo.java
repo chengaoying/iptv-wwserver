@@ -1,9 +1,8 @@
 package cn.ohyeah.ww.server.model;
 
-import cn.ohyeah.ww.client.model.ClientRoleGameInfo;
-import cn.ohyeah.ww.server.game.Influence;
+import cn.ohyeah.ww.client.model.ClientPlayerInfo;
 
-public class ServerRoleGameInfo {
+public class ServerPlayerInfo {
     /**
      * ¿ÕÏÐ×´Ì¬£¬¸Õ¼ÓÈëÓÎÏ·×ÀµÄ×´Ì¬
      */
@@ -31,13 +30,13 @@ public class ServerRoleGameInfo {
     private int[] freeProps;
     private int state;
 
-    public ServerRoleGameInfo(ServerRoleInfo role) {
+    public ServerPlayerInfo(ServerRoleInfo role) {
         this.role = role;
         this.state = STATE_IDLE;
     }
 
-    public ClientRoleGameInfo createClientRoleGameInfo() {
-        ClientRoleGameInfo croleGame = new ClientRoleGameInfo();
+    public ClientPlayerInfo createClientRoleGameInfo() {
+        ClientPlayerInfo croleGame = new ClientPlayerInfo();
         croleGame.setInfluenceId((byte)influenceId);
         croleGame.setRoleName(role.getGameRole().getRoleName());
         return croleGame;

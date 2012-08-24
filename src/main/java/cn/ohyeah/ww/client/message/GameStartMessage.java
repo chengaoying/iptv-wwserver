@@ -2,14 +2,14 @@ package cn.ohyeah.ww.client.message;
 
 
 import cn.ohyeah.stb.util.ByteBuffer;
-import cn.ohyeah.ww.client.model.ClientRoleGameInfo;
+import cn.ohyeah.ww.client.model.ClientPlayerInfo;
 import cn.ohyeah.ww.io.Serializable;
 
 import java.util.List;
 
 public class GameStartMessage implements Serializable {
     private short curRoleIndex;
-    private List<ClientRoleGameInfo> roles;
+    private List<ClientPlayerInfo> roles;
     private byte[] mapData;
 
     public int getCurRoleIndex() {
@@ -20,11 +20,11 @@ public class GameStartMessage implements Serializable {
         this.curRoleIndex = curRoleIndex;
     }
 
-    public List<ClientRoleGameInfo> getRoles() {
+    public List<ClientPlayerInfo> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<ClientRoleGameInfo> roles) {
+    public void setRoles(List<ClientPlayerInfo> roles) {
         this.roles = roles;
     }
 
