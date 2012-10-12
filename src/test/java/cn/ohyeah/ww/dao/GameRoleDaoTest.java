@@ -44,7 +44,7 @@ public class GameRoleDaoTest {
         for (int i = 0; i < 10; ++i) {
             final GameRole role = new GameRole();
             role.setRoleName("user" + System.nanoTime());
-            role.setAccountId(10000);
+           // role.setAccountId(10000);
             role.setUserId("igsuper00");
             role.setHeadIcon("default");
             role.setCreateTime(new java.util.Date());
